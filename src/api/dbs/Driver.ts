@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   DriverMetadataModel,
   MountVolumeModel,
@@ -8,7 +8,7 @@ import {
   ResponseModelListString,
   ResponseModelString,
   UnMountVolumeModel
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>
@@ -50,7 +50,10 @@ export const listAllDriver = async (
  * @summary 对卷挂载驱动
  * @request PUT:/mount
  */
-export const mount = async (model: MountVolumeModel, params: RequestParams = {}): Promise<ResponseModelListString> => {
+export const mount = async (
+  model: MountVolumeModel,
+  params: RequestParams = {}
+): Promise<ResponseModelListString> => {
   const res = await _request.put({
     url: `/mount`,
     data: model,
@@ -87,7 +90,10 @@ export const setChapControl = async (
  * @summary 卸载卷的驱动
  * @request PUT:/unmount
  */
-export const unmount = async (model: UnMountVolumeModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const unmount = async (
+  model: UnMountVolumeModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/unmount`,
     data: model,

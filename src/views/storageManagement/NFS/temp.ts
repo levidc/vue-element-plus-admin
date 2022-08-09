@@ -1,10 +1,10 @@
 type Person = {
-  id: 123,
+  id: 123
   str?: string
 }
-let p: Person = {
+const p: Person = {
   id: 123,
   str: '123'
 }
-let { id: key } = p
-console.log(key);
+const { id: key } = p
+console.log(key)

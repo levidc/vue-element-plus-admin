@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   PoolModel,
   PoolOperation,
@@ -10,7 +10,7 @@ import {
   ResponseModelSetSimpleStoragePool,
   ResponseModelSimpleStoragePool,
   ResponseModelString
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>
@@ -173,7 +173,10 @@ export const removeArchiveFromStoragePool = async (
  * @summary 更新存储池
  * @request PUT:/updateStoragePool
  */
-export const updateStoragePool = async (pool: PoolModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const updateStoragePool = async (
+  pool: PoolModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/updateStoragePool`,
     data: pool,

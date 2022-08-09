@@ -743,7 +743,7 @@ export interface GetPerformanceDataTimeSpanResponseMode {
   performanceDataTimeGranularityModel?: PerformanceDataTimeGranularityModel
 
   /** 时间粒度信息 */
-  performanceDataTimeUnit?: "FIVE_MINUTES" | "ONE_HOUR" | "ONE_DAY"
+  performanceDataTimeUnit?: 'FIVE_MINUTES' | 'ONE_HOUR' | 'ONE_DAY'
 }
 
 export interface IOLimitation {
@@ -1906,16 +1906,16 @@ export interface SimpleArchiveMetadata {
 
   /** 磁盘状态 */
   status?:
-    | "GOOD"
-    | "DEGRADED"
-    | "BROKEN"
-    | "CONFIG_MISMATCH"
-    | "OFFLINED"
-    | "OFFLINING"
-    | "EJECTED"
-    | "INPROPERLY_EJECTED"
-    | "UNKNOWN"
-    | "SEPARATED"
+    | 'GOOD'
+    | 'DEGRADED'
+    | 'BROKEN'
+    | 'CONFIG_MISMATCH'
+    | 'OFFLINED'
+    | 'OFFLINING'
+    | 'EJECTED'
+    | 'INPROPERLY_EJECTED'
+    | 'UNKNOWN'
+    | 'SEPARATED'
 
   /** 存储池id */
   storagePool?: string

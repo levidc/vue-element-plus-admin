@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   AccountModel,
   AssignModel,
@@ -15,7 +15,7 @@ import {
   ResponseModelSetLong,
   ResponseModelString,
   RoleModel
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>
@@ -52,7 +52,10 @@ export const assignResource = async (
  * @summary 更新角色
  * @request PUT:/assignRole
  */
-export const assignRole = async (operation: AssignModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const assignRole = async (
+  operation: AssignModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/assignRole`,
     data: operation,
@@ -69,7 +72,10 @@ export const assignRole = async (operation: AssignModel, params: RequestParams =
  * @summary 创建用户
  * @request POST:/createAccount
  */
-export const createAccount = async (user: AccountModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const createAccount = async (
+  user: AccountModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.post({
     url: `/createAccount`,
     data: user,
@@ -86,7 +92,10 @@ export const createAccount = async (user: AccountModel, params: RequestParams = 
  * @summary 创建角色
  * @request POST:/createRole
  */
-export const createRole = async (role: RoleModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const createRole = async (
+  role: RoleModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.post({
     url: `/createRole`,
     data: role,
@@ -123,7 +132,10 @@ export const deleteAccount = async (
  * @summary 删除角色
  * @request DELETE:/deleteRole
  */
-export const deleteRole = async (model: DeleteRoleModel, params: RequestParams = {}): Promise<ResponseModelSetLong> => {
+export const deleteRole = async (
+  model: DeleteRoleModel,
+  params: RequestParams = {}
+): Promise<ResponseModelSetLong> => {
   const res = await _request.delete({
     url: `/deleteRole`,
     data: model,
@@ -220,7 +232,10 @@ export const listRole = async (
  * @summary 用户登录
  * @request PUT:/login
  */
-export const login = async (usermodel: AccountModel, params: RequestParams = {}): Promise<ResponseModelAccount> => {
+export const login = async (
+  usermodel: AccountModel,
+  params: RequestParams = {}
+): Promise<ResponseModelAccount> => {
   const res = await _request.put({
     url: `/login`,
     data: usermodel,
@@ -237,7 +252,10 @@ export const login = async (usermodel: AccountModel, params: RequestParams = {})
  * @summary 退出登录
  * @request PUT:/logout
  */
-export const logout = async (usermodel: AccountModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const logout = async (
+  usermodel: AccountModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/logout`,
     data: usermodel,
@@ -254,7 +272,10 @@ export const logout = async (usermodel: AccountModel, params: RequestParams = {}
  * @summary 重置密码
  * @request PUT:/resetPassword
  */
-export const resetPassword = async (model: ResetPwdModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const resetPassword = async (
+  model: ResetPwdModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/resetPassword`,
     data: model,
@@ -271,7 +292,10 @@ export const resetPassword = async (model: ResetPwdModel, params: RequestParams 
  * @summary  更新密码
  * @request PUT:/updatePassword
  */
-export const updatePassword = async (user: AccountModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const updatePassword = async (
+  user: AccountModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/updatePassword`,
     data: user,
@@ -288,7 +312,10 @@ export const updatePassword = async (user: AccountModel, params: RequestParams =
  * @summary  更新角色
  * @request PUT:/updateRole
  */
-export const updateRole = async (role: RoleModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const updateRole = async (
+  role: RoleModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/updateRole`,
     data: role,

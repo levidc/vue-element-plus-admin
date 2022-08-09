@@ -1,12 +1,12 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   DiskModel,
   OnLineDiskModel,
   ResponseModelListSimpleArchiveMetadata,
   ResponseModelString
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>
@@ -105,7 +105,10 @@ export const listAllDisks = async (
  * @summary 卸载磁盘
  * @request PUT:/offlineDisk
  */
-export const offlineDisk = async (operation: DiskModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const offlineDisk = async (
+  operation: DiskModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/offlineDisk`,
     data: operation,

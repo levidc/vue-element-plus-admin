@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   DeleteModel,
   DiskLightModel,
@@ -11,7 +11,7 @@ import {
   ResponseModelServerNode,
   ResponseModelString,
   ServerNodeModel
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>

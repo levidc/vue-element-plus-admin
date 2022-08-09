@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   CloneVolumeModel,
   CopyVolumeModel,
@@ -18,7 +18,7 @@ import {
   ResponseModelString,
   SnapshotVolumeModel,
   VolumeModel
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>
@@ -135,7 +135,10 @@ export const createVolume = async (
  * @summary 删除卷
  * @request DELETE:/deleteVolume
  */
-export const deleteVolume = async (model: VolumeModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const deleteVolume = async (
+  model: VolumeModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.delete({
     url: `/deleteVolume`,
     data: model,
@@ -381,7 +384,10 @@ export const getVolumeWithoutSegmentById = async (
  * @summary 基于快照创建克隆卷
  * @request POST:/linkClone
  */
-export const linkClone = async (model: CloneVolumeModel, params: RequestParams = {}): Promise<ResponseModelLong> => {
+export const linkClone = async (
+  model: CloneVolumeModel,
+  params: RequestParams = {}
+): Promise<ResponseModelLong> => {
   const res = await _request.post({
     url: `/linkClone`,
     data: model,
@@ -441,7 +447,10 @@ export const listRecycleVolumeInfo = async (
  * @summary 迁移卷
  * @request PUT:/moveVolume
  */
-export const moveVolume = async (model: MoveVolumeModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const moveVolume = async (
+  model: MoveVolumeModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/moveVolume`,
     data: model,
@@ -478,7 +487,10 @@ export const moveVolumeToRecycle = async (
  * @summary 回收卷，无该功能
  * @request PUT:/recycleVolume
  */
-export const recycleVolume = async (model: RecycleModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const recycleVolume = async (
+  model: RecycleModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/recycleVolume`,
     data: model,
@@ -556,7 +568,13 @@ export const reportCsiHeartbeat = async (
  * @request PUT:/reportCsiVolumePodConnectInfo
  */
 export const reportCsiVolumePodConnectInfo = async (
-  query: { accountId: number; isConnect: string; nodeId: string; version: string; volumeId: string },
+  query: {
+    accountId: number
+    isConnect: string
+    nodeId: string
+    version: string
+    volumeId: string
+  },
   params: RequestParams = {}
 ): Promise<ResponseModelCsiVolumeInfo> => {
   const res = await _request.put({
@@ -575,7 +593,9 @@ export const reportCsiVolumePodConnectInfo = async (
  * @summary restful服务心跳
  * @request PUT:/restfulHealthPing
  */
-export const restfulHealthPing = async (params: RequestParams = {}): Promise<ResponseModelString> => {
+export const restfulHealthPing = async (
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/restfulHealthPing`,
     ...params

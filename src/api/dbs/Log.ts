@@ -1,7 +1,11 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
-import { ResponseModelArrayByte, ResponseModelFtpInfo, ResponseModelListSimpleOperation } from "./data-contracts"
+import { useAxios } from '@/hooks/web/useAxios'
+import {
+  ResponseModelArrayByte,
+  ResponseModelFtpInfo,
+  ResponseModelListSimpleOperation
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>

@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   IOLimitationApplyModel,
   IOLimitationDelModel,
@@ -15,7 +15,7 @@ import {
   ResponseModelListSimpleDriverMetadata,
   ResponseModelListSimpleStoragePool,
   ResponseModelString
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>

@@ -402,6 +402,12 @@ const renderForm = computed(() => {
     //   // setValues无效
     //   formRef.value.formModel.field1 = '123'
     // })
+    // formRef.value.setValues({
+    //   field1: 'testAddd'
+    // })
+    formRef?.value?.setValues({
+      field1: 'testAdd'
+    })
   }
   // pane.value
   return formReflect[btn.value]

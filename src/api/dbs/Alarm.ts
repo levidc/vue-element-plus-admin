@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   AlertOperationModel,
   DeleteAlertModel,
@@ -21,7 +21,7 @@ import {
   RuleModel,
   SmtpModel,
   SnmpForwardModel
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>
@@ -98,7 +98,10 @@ export const clearAlarm = async (
  * @summary 创建告警模板
  * @request POST:/createAlarmRule
  */
-export const createAlarmRule = async (rules: RuleModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const createAlarmRule = async (
+  rules: RuleModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.post({
     url: `/createAlarmRule`,
     data: rules,
@@ -442,7 +445,10 @@ export const listSnmpForward = async (
  * @summary 合并告警规则
  * @request PUT:/mergeAlarmRule
  */
-export const mergeAlarmRule = async (rules: RuleModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const mergeAlarmRule = async (
+  rules: RuleModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/mergeAlarmRule`,
     data: rules,
@@ -459,7 +465,10 @@ export const mergeAlarmRule = async (rules: RuleModel, params: RequestParams = {
  * @summary 创建或更新SMTP
  * @request PUT:/saveOrUpdateSmtp
  */
-export const saveOrUpdateSmtp = async (smtp: SmtpModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const saveOrUpdateSmtp = async (
+  smtp: SmtpModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/saveOrUpdateSmtp`,
     data: smtp,
@@ -516,7 +525,10 @@ export const stopAlarmRule = async (
  * @summary 更新告警规则
  * @request PUT:/updateAlarmRule
  */
-export const updateAlarmRule = async (rules: RuleModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const updateAlarmRule = async (
+  rules: RuleModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.put({
     url: `/updateAlarmRule`,
     data: rules,

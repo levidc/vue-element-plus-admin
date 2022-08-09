@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
-import { useAxios } from "@/hooks/web/useAxios"
+import { useAxios } from '@/hooks/web/useAxios'
 import {
   DomainModel,
   RemoveModel,
@@ -8,7 +8,7 @@ import {
   ResponseModelListSimpleInstance,
   ResponseModelSimpleDomain,
   ResponseModelString
-} from "./data-contracts"
+} from './data-contracts'
 
 const _request = useAxios()
 export type RequestParams = Record<string, string | number>
@@ -45,7 +45,10 @@ export const createDomain = async (
  * @summary 删除域
  * @request DELETE:/deleteDomain
  */
-export const deleteDomain = async (model: DomainModel, params: RequestParams = {}): Promise<ResponseModelString> => {
+export const deleteDomain = async (
+  model: DomainModel,
+  params: RequestParams = {}
+): Promise<ResponseModelString> => {
   const res = await _request.delete({
     url: `/deleteDomain`,
     data: model,
