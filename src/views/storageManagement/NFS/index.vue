@@ -17,6 +17,10 @@ import { TableData } from '@/api/table/types'
 const { t } = useI18n()
 const { required } = useValidator()
 
+const TableR = ref()
+
+const disabledDel = ref(true)
+
 const options = [
   {
     value: 'nfsShare',
@@ -39,7 +43,7 @@ const options = [
   {
     value: 'delete',
     label: '删除',
-    disabled: true
+    disabled: disabledDel //传递到结构上的ref无需value访问
   },
   {
     value: 'test',
@@ -208,6 +212,10 @@ const overviewColumn = [
     form: {
       colProps: {
         span: 10
+      },
+      component: 'Input',
+      componentProps: {
+        placeholder: '123'
       }
     }
   }
@@ -276,6 +284,15 @@ const formReflect = {
       componentProps: {
         readonly: true
       }
+    },
+    {
+      field: 'field2',
+      label: '测试双栏',
+      component: 'Input',
+      componentProps: {
+        placeholder: '输入中英文'
+        // readonly: true
+      }
     }
   ],
   remove: [
@@ -294,19 +311,6 @@ const formReflect = {
   ]
 }
 
-// const matchForm = (val) => {
-//   switch (val) {
-//     case 'create':
-//       console.log(val, 'create')
-//       break
-//     case 'set':
-//       console.log(val, 'set')
-//       break
-//     default:
-//       break
-//   }
-// }
-
 const { register, tableObject, methods } = useTable<TableData>({
   getListApi: mockNFS,
   delListApi: delTableListApi,
@@ -316,6 +320,7 @@ const { register, tableObject, methods } = useTable<TableData>({
     total: 'total'
   }
 })
+
 const { getList, setSearchParams } = methods
 getList()
 
@@ -375,7 +380,7 @@ const formSubmit = () => {
     ?.validate((valid) => {
       //formModel 表单绑定对应值
       let { formModel } = formRef.value
-      // console.log(formModel, '123', formRef.value)
+      console.log(formModel, '123', formRef.value)
       if (valid) {
         console.log('submit success')
       } else {
@@ -383,7 +388,6 @@ const formSubmit = () => {
       }
     })
 }
-const TableR = ref()
 
 const btn = ref()
 
@@ -406,7 +410,7 @@ const renderForm = computed(() => {
     //   field1: 'testAddd'
     // })
     formRef?.value?.setValues({
-      field1: 'testAdd'
+      field1: 'nolonger'
     })
   }
   // pane.value
@@ -421,7 +425,24 @@ watch(
     disableSingle.value = val.length !== 1
   }
 )
-
+watch(
+  () => createFlag.value,
+  (val) => {
+    if (!val) {
+      // list
+      getList()
+    }
+  }
+)
+watch(
+  () => TableR.value?.selections,
+  (val) => {
+    console.log(val, '多选框')
+    // 禁用级联面板控制
+    disabledDel.value = val?.[0]?.clientCount > 100
+    console.log(disabledDel.value)
+  }
+)
 function getTitles(arr) {
   const temp = []
   for (let i = 0; i < arr.length; i++) {
@@ -446,7 +467,7 @@ const getPane = (val: string | number | void) => {
     // pane值清空取消级联面板高亮显示、赋值btn作为判断title名称及渲染form的标识
     btn.value = val
     // dropdown关闭
-    dropdown.value.handleClose()
+    // dropdown.value.handleClose()
     createFlag.value = true
   }
 }
