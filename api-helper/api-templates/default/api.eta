@@ -1,0 +1,28 @@
+<%
+const { apiConfig, routes, utils, config } = it;
+const { info, servers, externalDocs } = apiConfig;
+const { _, require, formatDescription } = utils;
+
+const server = (servers && servers[0]) || { url: "" };
+
+%>
+
+<% if (config.httpClientType === config.constants.HTTP_CLIENT.AXIOS) { %> import { AxiosRequestConfig, AxiosResponse } from "axios"; <% } %>
+
+<% routes.outOfModule && routes.outOfModule.forEach((route) => { %>
+
+        <%~ includeFile('./procedure-call.eta', { ...it, route }) %>
+
+
+<% }) %>
+
+<% routes.combined && routes.combined.forEach(({ routes = [], moduleName }) => { %>
+export const <%~ moduleName %> = {
+    <% routes.forEach((route) => { %>
+
+        <%~ includeFile('./procedure-call.eta', { ...it, route }) %>
+
+
+    <% }) %>
+    }
+<% }) %>

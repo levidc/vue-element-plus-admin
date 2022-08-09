@@ -1,0 +1,20 @@
+<script setup lang="ts">
+import { useDesign } from '@/hooks/web/useDesign'
+
+const { getPrefixCls } = useDesign()
+
+const prefixCls = getPrefixCls('{{ name }}')
+</script>
+
+<template>
+  <div :class="[prefixCls]">{{ upperFirstName }}</div>
+</template>
+
+<style lang="less" scoped>
+@prefix-cls: ~'@{namespace}-{{ name }}';
+
+.@{prefix-cls} {
+  // TODO 在此处添加样式
+}
+
+</style>

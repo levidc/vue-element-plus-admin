@@ -1,0 +1,13 @@
+<%
+const { apiConfig, generateResponses, config } = it;
+%>
+
+import { useAxios } from "@/hooks/web/useAxios"
+
+export type RequestParams = Record<string, string | number>
+
+export const _request = useAxios()
+
+export const doRst = (res) => {
+  return res && res.data
+}

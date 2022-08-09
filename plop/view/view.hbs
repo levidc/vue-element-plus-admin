@@ -1,0 +1,11 @@
+<script setup lang="ts">
+import { ContentWrap } from '@/components/ContentWrap'
+
+defineOptions({
+  name: '{{ upperFirstName }}'
+})
+</script>
+
+<template>
+  <ContentWrap title="{{ upperFirstName }}"> {{ name }} </ContentWrap>
+</template>
