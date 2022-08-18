@@ -8,6 +8,7 @@ module.exports.generate = (
   modular = true,
   singleApiFileName = null,
   renameTags = null,
+  ignorePaths = null,
   cleanOutput = false
 ) => {
   const templatePath = modular ? 'modular' : 'default'
@@ -55,8 +56,8 @@ module.exports.generate = (
     generateUnionEnums: false, // 将所有“枚举”类型生成为联合类型，默认false
     extraTemplates: [],
     hooks: {
-      onCreateComponent: (component) => {},
-      onCreateRequestParams: (rawType) => {},
+      onCreateComponent: (component) => { },
+      onCreateRequestParams: (rawType) => { },
       onCreateRoute: (routeData) => {
         if (renameTags) {
           const tag =
@@ -69,7 +70,7 @@ module.exports.generate = (
           }
         }
       },
-      onCreateRouteName: (routeNameInfo, rawRouteInfo) => {},
+      onCreateRouteName: (routeNameInfo, rawRouteInfo) => { },
       onFormatRouteName: (routeInfo, templateRouteName) => {
         let routeName = routeInfo.route.split('/').pop()
         if (!routeName)
@@ -78,7 +79,7 @@ module.exports.generate = (
         routeName = routeName[0].toLowerCase() + routeName.substring(1)
         return routeName != 'delete' ? routeName : 'del'
       },
-      onFormatTypeName: (typeName, rawTypeName) => {},
+      onFormatTypeName: (typeName, rawTypeName) => { },
       onInit: (configuration) => {
         apiInfo = configuration.swaggerSchema.info || null
         const perfix = '      '
@@ -100,13 +101,19 @@ module.exports.generate = (
         console.log(perfix, '===========================================')
         console.log('')
         configuration.templatePaths.base = path.resolve(__dirname, './api-templates', 'base')
+        if (ignorePaths) {
+          for (const igPath of ignorePaths) {
+            delete configuration.swaggerSchema.paths[igPath]
+            delete configuration.originalSchema.paths[igPath]
+          }
+        }
         // console.log('onInit', configuration)
         if (modular && fs.existsSync(httpClientFilePath)) {
           httpClientFileData = fs.readFileSync(httpClientFilePath, 'utf8')
         }
       },
-      onParseSchema: (originalSchema, parsedSchema) => {},
-      onPrepareConfig: (currentConfiguration) => {}
+      onParseSchema: (originalSchema, parsedSchema) => { },
+      onPrepareConfig: (currentConfiguration) => { }
     }
   })
     .then(({ files, configuration }) => {
@@ -127,13 +134,13 @@ module.exports.generate = (
         let data = fs.readFileSync(fpath, 'utf8')
         data = data.replace(logo, comment)
 
-        fs.writeFile(fpath, data, {}, (err) => {})
+        fs.writeFile(fpath, data, {}, (err) => { })
         //   // console.log('  --->', name)
         //   // fs.writeFile(path.resolve(__dirname, './dist', name), content, {}, (err) => {})
       })
       if (modular && httpClientFileData) {
         setTimeout(() => {
-          fs.writeFile(path.resolve(output, 'http-client.ts'), httpClientFileData, {}, (err) => {})
+          fs.writeFile(path.resolve(output, 'http-client.ts'), httpClientFileData, {}, (err) => { })
         }, 50)
       }
       console.log('----------')
@@ -142,7 +149,7 @@ module.exports.generate = (
     .catch((e) => console.error(e))
 }
 
-function toHump(str) {
+function toHump (str) {
   if (str.indexOf('-') < 0 && str.indexOf('_') < 0) return str
   return str.toLowerCase().replace(/[_-]([a-z])/g, (all, val) => val.toUpperCase())
 }

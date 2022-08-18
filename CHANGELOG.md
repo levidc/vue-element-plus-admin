@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.2](https://github.com/kailong321200875/vue-element-plus-admin/compare/v1.6.1...v1.6.2) (2022-08-13)
+
+
+### Styling
+
+* Misspelling ([c43e833](https://github.com/kailong321200875/vue-element-plus-admin/commit/c43e833582e4f14ac78b0683f1eb3bdeb9fb4821))
+* perfect tableDemo ([c589edd](https://github.com/kailong321200875/vue-element-plus-admin/commit/c589edd960b23ad0c8b56d2c7880b61014114d45))
+
+
+### Code Refactoring
+
+* refactor axios ([0980640](https://github.com/kailong321200875/vue-element-plus-admin/commit/0980640f65fc80e3e58ba49e98db10b7b1b80077))
+
+## [1.6.1](https://github.com/kailong321200875/vue-element-plus-admin/compare/v1.6.0...v1.6.1) (2022-07-30)
+
+
+### Bug Fixes
+
+* fix menu active bug ([ff59fc7](https://github.com/kailong321200875/vue-element-plus-admin/commit/ff59fc7e133202945360a7e210f9cdf3a4a89dd7))
+* Pie chart data not updated ([55d4ce7](https://github.com/kailong321200875/vue-element-plus-admin/commit/55d4ce7e35ff9a0c5590bc3589160cfd304d3ae5))
+
+
+### Performance Improvements
+
+* add static router ([55522b0](https://github.com/kailong321200875/vue-element-plus-admin/commit/55522b0661a8df3ad3c8afafcc9f8fcb162c5a00))
+
+
+### Styling
+
+* tagviews styles update ([bff7d93](https://github.com/kailong321200875/vue-element-plus-admin/commit/bff7d9370db7a9c171828721bb99643dac2f235d))
+
 ## [1.6.0](https://github.com/kailong321200875/vue-element-plus-admin/compare/v1.5.4...v1.6.0) (2022-07-18)
 
 

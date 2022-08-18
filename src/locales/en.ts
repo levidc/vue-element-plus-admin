@@ -74,7 +74,9 @@ export default {
     copyFailed: 'Copy failed',
     footer: 'Footer',
     uniqueOpened: 'Unique opened',
-    tagsViewIcon: 'Tags view icon'
+    tagsViewIcon: 'Tags view icon',
+    dynamicRouter: 'Dynamic router',
+    reExperienced: 'Please exit the login experience again'
   },
   size: {
     default: 'Default',
@@ -375,7 +377,8 @@ export default {
     showExpandedRows: 'Show expanded rows',
     hiddenExpandedRows: 'Hidden expanded rows',
     changeTitle: 'Change title',
-    header: 'Header'
+    header: 'Header',
+    selectAllNone: 'Select all / none'
   },
   richText: {
     richText: 'Rich text',

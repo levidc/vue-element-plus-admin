@@ -3,6 +3,7 @@ import { useI18n } from '@/hooks/web/useI18n'
 import { useValidator } from '@/hooks/web/useValidator'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getTableListApi, delTableListApi, saveTableApi, getTableDetApi } from '@/api/table'
+import { TableData } from '@/api/table/types'
 
 const { t } = useI18n()
 const { required } = useValidator()
@@ -13,11 +14,31 @@ const { required } = useValidator()
 //            a. 顶部引入 import { getRoutes as get{{ upperFirstName }}Routes } from '@/{{ path }}/{{ upperFirstName }}/routes'
 //            b. 合适的位置加入并展开（参数为父级路由） ...get{{ upperFirstName }}Routes('/my-demos')
 
-// TODO 3）配置增删改查接口
+// TODO 3）配置数据记录类型和增删改查接口
+export type ItemRecord = TableData // 若没有类型，默认可设置为：Recordable
 export const getListApi = getTableListApi
 export const delListApi = delTableListApi
 export const saveApi = saveTableApi
 export const getApi = getTableDetApi
+
+// 虚拟分页配置方式
+// a）在config的use中开启virtualPage:true
+// b）虚拟分页开启后，默认检索和排序都是本地模式，可通过在crudSchemas配置项中设置realFilter:true、realSort:true
+//    单独此字段的远程检索排序模式
+// c）启用排序需在crudSchemas配置项中设置 sortable:'custom'（不能设为true），可通过virtualSortMethod来替换
+//    默认的排序方式：virtualSortMethod:(a,b)=>{return -1/0/1}
+// d）可通过virtualFilterMethod来替换默认的排序方式：virtualFilterMethod:(value,row,column)=>{return true/false}
+//    有多个检索字段时，virtualFilterMethod可能会调用多次，只要有一次返回false，此数据就不会出现在最终列表中
+export const config: UseTableConfigX<ItemRecord> = {
+  getListApi,
+  delListApi,
+  getApi,
+  saveApi,
+  response: {
+    list: 'list',
+    total: 'total'
+  }
+}
 
 const crudSchemas = reactive<CrudSchema[]>([
   // TODO 4）此处配置展示的项目

@@ -2,12 +2,16 @@
 const { apiConfig, generateResponses, config } = it;
 %>
 
-import { useAxios } from "@/hooks/web/useAxios"
+import request from '@/config/axios'
 
-export type RequestParams = Record<string, string | number>
+type RequestParams = Record<string, string | number>
 
-export const _request = useAxios()
+const doRst = (res) => {
+  return res
+}
 
-export const doRst = (res) => {
-  return res && res.data
+export {
+  request,
+  RequestParams,
+  doRst
 }

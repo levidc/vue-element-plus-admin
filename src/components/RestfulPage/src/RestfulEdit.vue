@@ -3,17 +3,17 @@ import { useDesign } from '@/hooks/web/useDesign'
 import { ref, unref, PropType, onMounted, TeleportProps } from 'vue'
 import { propTypes } from '@/utils/propTypes'
 import { useI18n } from '@/hooks/web/useI18n'
-import { useRouter } from 'vue-router'
 import { useEmitt } from '@/hooks/web/useEmitt'
 import { ElButton } from 'element-plus'
 import RestfulWrite from './components/RestfulWrite.vue'
-import RestfulDetail from './components/RestfulDetail.vue'
+import { Descriptions } from '@/components/Descriptions'
 
 const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('RestfulEdit')
-const { push } = useRouter()
 const { emitter } = useEmitt()
 const { t } = useI18n()
+
+type ItemRecord = Recordable
 
 const props = defineProps({
   id: {
@@ -38,14 +38,16 @@ const props = defineProps({
     default: () => []
   },
   rules: {
-    type: Object as PropType<Record<string, any[]>>,
+    type: Object as PropType<Recordable>,
     default: () => {}
   },
   editable: propTypes.bool.def(false),
-  actionTo: Object as PropType<TeleportProps['to']>
+  actionTo: undefined as unknown as PropType<TeleportProps['to']>
 })
 
-type ItemRecord = typeof props.types.recordType | any
+const emit = defineEmits<{
+  (e: 'save', row: ItemRecord): void
+}>()
 
 const currentRow = ref<Nullable<ItemRecord>>(null)
 
@@ -62,7 +64,7 @@ const writeRef = ref<ComponentRef<typeof RestfulWrite>>()
 
 const loading = ref(false)
 
-const save = async () => {
+const onSave = async () => {
   const write = unref(writeRef)
   const validate = await write?.elFormRef?.validate()?.catch(() => {})
   if (validate) {
@@ -76,7 +78,7 @@ const save = async () => {
       })
     if (res) {
       emitter.emit(`${props.nameCode}List`, props.id ? 'edit' : 'add')
-      push({ name: `${props.nameCode}List` })
+      emit('save', { ...(currentRow.value || {}) } || null)
     }
   }
 }
@@ -93,15 +95,16 @@ onMounted(() => (mounted.value = true))
       :current-row="currentRow"
       :form-schema="formSchema"
       :rules="rules"
+      :config="config.formProps"
     />
-    <RestfulDetail v-else :current-row="currentRow" :detail-schema="detailSchema">
+    <Descriptions v-else :data="currentRow || {}" :schema="detailSchema" v-bind="config.descProps">
       <template v-for="(item, key, index) in $slots" :key="index" #[key]="data">
         <slot :name="key" v-bind="data" :src="item"></slot>
       </template>
-    </RestfulDetail>
+    </Descriptions>
     <div v-if="editable" class="flex justify-center">
       <Teleport v-if="mounted" :to="actionTo" :disabled="!actionTo">
-        <ElButton type="primary" :loading="loading" @click="save">
+        <ElButton type="primary" :loading="loading" @click="onSave">
           {{ t('exampleDemo.save') }}
         </ElButton>
       </Teleport>

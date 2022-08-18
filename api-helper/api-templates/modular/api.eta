@@ -6,7 +6,7 @@ const routes = route.routes;
 const dataContracts = _.map(modelTypes, "name");
 %>
 <% if (config.httpClientType === config.constants.HTTP_CLIENT.AXIOS) { %> import { AxiosRequestConfig, AxiosResponse } from "axios"; <% } %>
-import { _request, RequestParams, doRst } from './http-client'
+import { request, RequestParams, doRst } from './http-client'
 <% if (dataContracts.length) { %>
 import { <%~ dataContracts.join(", ") %> } from "./<%~ config.fileNames.dataContracts %>"
 <% } %>

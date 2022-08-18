@@ -50,9 +50,13 @@ export default [
         if (title && item.title.indexOf(title) < 0) return false
         return true
       })
-      const pageList = mockList.filter(
-        (_, index) => index < pageSize * pageIndex && index >= pageSize * (pageIndex - 1)
-      )
+      // SRC: 未设置page信息时，返回全部测试数据
+      const pageList =
+        !pageSize || !pageIndex
+          ? mockList
+          : mockList.filter(
+              (_, index) => index < pageSize * pageIndex && index >= pageSize * (pageIndex - 1)
+            )
       return {
         code: result_code,
         data: {

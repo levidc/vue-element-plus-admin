@@ -1,4 +1,4 @@
-import { service } from '@/config/axios'
+import { service } from '@/config/axios/service'
 
 import { AxiosPromise } from 'axios'
 

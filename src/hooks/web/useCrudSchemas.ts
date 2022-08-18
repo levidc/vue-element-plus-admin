@@ -211,7 +211,8 @@ const filterFormSchema = (crudSchema: CrudSchema[], allSchemas: AllSchemas): For
   for (const task of formRequestTask) {
     task()
   }
-  console.log(formSchema)
+  // SRC: 去掉console.log
+  // console.log(formSchema)
   return formSchema
 }
 

@@ -1,8 +1,8 @@
 const { generate } = require('./generate')
 const path = require('path')
 
-const dist = 'src/api'
-// const dist = 'api-helper/dist'
+// const dist = 'src/api'
+const dist = 'api-helper/dist'
 
 const apis = {
   DBS: {
@@ -62,10 +62,44 @@ const apis = {
       '系统管理 | 调试': 'DebugMgmt',
       '自服务|空间信息': 'SpaceManage'
     }
+  },
+  FS: {
+    api: 'http://10.0.3.216:8099/v2/api-docs',
+    tags: {
+      'apply-nfs-acl-relationship-controller': 'NfsAcl',
+      'apply-samba-acl-relationship-controller': 'SambaAcl',
+      'basic-error-controller': 'BasicError',
+      'cancel-nfs-acl-relationship-controller': 'NfsAcl',
+      'cancel-samba-acl-relationship-controller': 'SambaAcl',
+      'create-nfs-acl-controller': 'NfsAcl',
+      'create-nfs-gateway-controller': 'NfsGateway',
+      'create-samba-acl-controller': 'SambaAcl',
+      'create-samba-gateway-controller': 'SambaGateway',
+      'format-controller': 'Format',
+      'get-nfs-acl-controller': 'NfsAcl',
+      'get-nfs-gateway-controller': 'NfsGateway',
+      'get-samba-acl-controller': 'SambaAcl',
+      'get-samba-gateway-controller': 'SambaGateway',
+      'list-buckets-controller': 'Buckets',
+      'list-nfs-acl-controller': 'NfsAcl',
+      'list-nfs-gateway-controller': 'NfsGateway',
+      'list-samba-acl-controller': 'SambaAcl',
+      'list-samba-gateway-controller': 'SambaGateway',
+      'mount-controller': 'Mount',
+      'remove-nfs-acl-controller': 'NfsAcl',
+      'remove-nfs-gateway-controller': 'NfsGateway',
+      'remove-samba-acl-controller': 'SambaAcl',
+      'remove-samba-gateway-controller': 'SambaGateway',
+      '外部NAS/DBS资源': 'ExternalStorage',
+      '对象存储资源': 'ObjectStorage',
+    },
+    ignorePaths: [
+      '/error'
+    ]
   }
 }
 
-function doGenerate(name, modular) {
+function doGenerate (name, modular) {
   generate(
     apis[name].api,
     modular
@@ -73,8 +107,9 @@ function doGenerate(name, modular) {
       : path.resolve(__dirname, '../', dist),
     modular,
     modular ? 'api.ts' : `api-${name.toLowerCase()}.ts`,
-    apis[name].tags
+    apis[name].tags,
+    apis[name].ignorePaths
   )
 }
 
-doGenerate('DBS', true)
+doGenerate('FS', true)

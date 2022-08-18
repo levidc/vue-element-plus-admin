@@ -3,13 +3,15 @@ import { useDesign } from '@/hooks/web/useDesign'
 import { Form } from '@/components/Form'
 import { useForm } from '@/hooks/web/useForm'
 import { PropType, watch } from 'vue'
-import { TableData } from '@/api/table/types'
+import { FormProps } from '@/components/Form/src/types'
 
 const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('RestfulWrite')
+type ItemRecord = Recordable
+
 const props = defineProps({
   currentRow: {
-    type: Object as PropType<Nullable<TableData>>,
+    type: Object as PropType<Nullable<ItemRecord>>,
     default: () => null
   },
   formSchema: {
@@ -19,12 +21,18 @@ const props = defineProps({
   rules: {
     type: Object as PropType<Recordable>,
     default: () => {}
+  },
+  config: {
+    type: Object as PropType<FormProps>,
+    default: () => {}
   }
 })
 
-const { register, methods, elFormRef } = useForm({
-  schema: props.formSchema
-})
+const { register, methods, elFormRef } = useForm(
+  Object.assign(props.config || {}, {
+    schema: props.formSchema
+  })
+)
 
 watch(
   () => props.currentRow,

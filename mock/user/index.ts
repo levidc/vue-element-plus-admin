@@ -12,21 +12,21 @@ const List: {
   roleId: string
   permissions: string | string[]
 }[] = [
-    {
-      username: 'admin',
-      password: 'admin',
-      role: 'admin',
-      roleId: '1',
-      permissions: ['*.*.*']
-    },
-    {
-      username: 'test',
-      password: 'test',
-      role: 'test',
-      roleId: '2',
-      permissions: ['example:dialog:create', 'example:dialog:delete']
-    }
-  ]
+  {
+    username: 'admin',
+    password: 'admin',
+    role: 'admin',
+    roleId: '1',
+    permissions: ['*.*.*']
+  },
+  {
+    username: 'test',
+    password: 'test',
+    role: 'test',
+    roleId: '2',
+    permissions: ['example:dialog:create', 'example:dialog:delete']
+  }
+]
 
 export default [
   // 列表接口

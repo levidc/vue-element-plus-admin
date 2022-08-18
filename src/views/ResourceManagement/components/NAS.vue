@@ -54,14 +54,14 @@ const listInterval = () => {
 }
 const crudSchemas = reactive<CrudSchema[]>([
   {
-    field: 'body',
+    field: 'storageName',
     label: t('externalStorage.name'),
     search: {
       show: true
     }
   },
   {
-    field: 'status',
+    field: 'storageStatus',
     label: t('common.status'),
     formatter: (_: Recordable, __: TableColumn, cellValue: number) => {
       return h(
@@ -89,6 +89,10 @@ const crudSchemas = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'storageType',
+    label: '存储类型'
+  },
+  {
     field: 'totalSpace',
     label: t('common.totalSpace') + '(GB)',
     form: {
@@ -113,32 +117,40 @@ const crudSchemas = reactive<CrudSchema[]>([
     label: t('common.usedSpace') + '(GB)'
   },
   {
-    field: 'mountType',
-    label: t('common.mountType'),
-    form: {
-      component: 'Select',
-      componentProps: {
-        options: [
-          {
-            label: 'CIFS',
-            value: '1'
-          },
-          {
-            label: 'NFS',
-            value: '2'
-          }
-        ]
-      }
-    }
+    field: 'allocatedSpace',
+    label: '已分配容量'
   },
   {
-    field: 'remoteDirectory',
-    label: t('common.remoteDirectory')
-  },
-  {
-    field: 'localDirectory',
-    label: t('common.localDirectory')
+    field: 'performanceType',
+    label: '性能类型'
   }
+  // {
+  //   field: 'mountType',
+  //   label: t('common.mountType'),
+  //   form: {
+  //     component: 'Select',
+  //     componentProps: {
+  //       options: [
+  //         {
+  //           label: 'CIFS',
+  //           value: '1'
+  //         },
+  //         {
+  //           label: 'NFS',
+  //           value: '2'
+  //         }
+  //       ]
+  //     }
+  //   }
+  // },
+  // {
+  //   field: 'remoteDirectory',
+  //   label: t('common.remoteDirectory')
+  // },
+  // {
+  //   field: 'localDirectory',
+  //   label: t('common.localDirectory')
+  // }
 ])
 
 const { allSchemas } = useCrudSchemas(crudSchemas)
@@ -156,7 +168,7 @@ watch(
       console.log('check clearTimer')
       timer && clearTimeout(timer)
     } else {
-      listInterval()
+      // listInterval()
       console.log('restart Timer')
     }
   }
@@ -212,7 +224,7 @@ const save = () => {
       @register="register"
     />
   </ContentWrap>
-  <Dialog v-model="createFlag" title="创建NAS存储" :max-height="300">
+  <Dialog v-model="createFlag" title="创建对象存储资源" :max-height="300">
     <ContentWrap>
       <Write
         ref="writeRef"

@@ -86,8 +86,8 @@ const describeReturnType = () => {
 <%~ routeDocs.lines %>
 
  */
-export const <%~ route.routeName.usage %> = async (<%~ wrapperArgs %>)<%~ config.toJS ? `: ${describeReturnType()}` : `: Promise<${type}>` %> => {
-    const res = await _request.<%~ _.lowerCase(method) %>({
+export const <%~ route.routeName.usage %> = (<%~ wrapperArgs %>)<%~ config.toJS ? `: ${describeReturnType()}` : `: Promise<${type}>` %> => {
+    return request.<%~ _.lowerCase(method) %>({
         url: `<%~ path %>`,
         <%~ queryTmpl ? `params: ${queryTmpl},` : '' %>
         <%~ bodyTmpl ? `data: ${bodyTmpl},` : '' %>
@@ -95,6 +95,5 @@ export const <%~ route.routeName.usage %> = async (<%~ wrapperArgs %>)<%~ config
         <% bodyContentKindTmpl ? `headersType: ${bodyContentKindTmpl},` : '' %>
         <% responseFormatTmpl ? `responseType: ${responseFormatTmpl},` : '' %>
         ...<%~ _.get(requestConfigParam, "name") %>,
-    })
-    return doRst(res)
+    }).then(res => doRst(res))
 }<%~ route.namespace ? ',' : '' %>

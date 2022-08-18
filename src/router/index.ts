@@ -127,12 +127,21 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
       alwaysShow: true
     },
     children: [
+      // {
+      //   path: 'externalStorage',
+      //   name: 'externalStorage',
+      //   component: () => import('@/views/ResourceManagement/externalStorage.vue'),
+      //   meta: {
+      //     title: t('externalStorage.title'),
+      //     noCache: true
+      //   }
+      // },
       {
-        path: 'externalStorage',
-        name: 'externalStorage',
+        path: 'objectResourece',
+        name: 'objectResourece',
         component: () => import('@/views/ResourceManagement/externalStorage.vue'),
         meta: {
-          title: t('externalStorage.title'),
+          title: '对象存储',
           noCache: true
         }
       }

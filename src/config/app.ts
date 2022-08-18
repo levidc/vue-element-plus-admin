@@ -34,6 +34,7 @@ export interface AppState {
   logo: boolean
   fixedHeader: boolean
   greyMode: boolean
+  dynamicRouter: boolean
   pageLoading: boolean
   layout: LayoutType
   title: string
@@ -56,7 +57,7 @@ export const appModules: AppState = {
   breadcrumb: true, // 面包屑
   breadcrumbIcon: true, // 面包屑图标
   collapse: false, // 折叠菜单
-  uniqueOpened: true, // 是否只保持一个子菜单的展开
+  uniqueOpened: false, // 是否只保持一个子菜单的展开
   hamburger: true, // 折叠图标
   screenfull: true, // 全屏图标
   size: true, // 尺寸图标
@@ -67,6 +68,7 @@ export const appModules: AppState = {
   fixedHeader: true, // 固定toolheader
   footer: true, // 显示页脚
   greyMode: false, // 是否开始灰色模式，用于特殊悼念日
+  dynamicRouter: wsCache.get('dynamicRouter') || false, // 是否动态路由
 
   layout: wsCache.get('layout') || 'classic', // layout布局
   isDark: wsCache.get('isDark') || false, // 是否是暗黑模式

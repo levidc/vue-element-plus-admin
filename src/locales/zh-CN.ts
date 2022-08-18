@@ -84,7 +84,9 @@ export default {
     copyFailed: '拷贝失败',
     footer: '页脚',
     uniqueOpened: '菜单手风琴',
-    tagsViewIcon: '标签页图标'
+    tagsViewIcon: '标签页图标',
+    dynamicRouter: '动态路由',
+    reExperienced: '请重新退出登录体验'
   },
   size: {
     default: '默认',
@@ -154,6 +156,9 @@ export default {
     sticky: '黏性',
     resourceManagement: '资源管理',
     storageManagement: '存储管理'
+  },
+  permission: {
+    hasPermission: '请设置操作权限值'
   },
   analysis: {
     newUser: '新增用户',
@@ -381,7 +386,8 @@ export default {
     showExpandedRows: '显示展开行',
     hiddenExpandedRows: '隐藏展开行',
     changeTitle: '修改标题',
-    header: '头部'
+    header: '头部',
+    selectAllNone: '全选/全不选'
   },
   richText: {
     richText: '富文本',

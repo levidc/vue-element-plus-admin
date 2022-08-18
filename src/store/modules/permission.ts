@@ -45,13 +45,12 @@ export const usePermissionStore = defineStore({
         let routerMap: AppRouteRecordRaw[] = []
         if (type === 'admin') {
           // 模拟后端过滤菜单
-          routerMap = cloneDeep(asyncRouterMap)
+          routerMap = generateRoutesFn2(routers as AppCustomRouteRecordRaw[])
         } else if (type === 'test') {
           // 模拟前端过滤菜单
           routerMap = generateRoutesFn1(cloneDeep(asyncRouterMap), routers as string[])
         } else {
           // 直接读取静态路由表
-          // routerMap = generateRoutesFn2(routers as AppCustomRouteRecordRaw[])
           routerMap = cloneDeep(asyncRouterMap)
         }
         // 动态路由，404一定要放到最后面

@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 import { ElTag } from 'element-plus'
 import { ContentDetailWrap } from '@/components/ContentDetailWrap'
 import { RestfulEdit } from '@/components/RestfulPage'
-import { allSchemas, rules, getApi, saveApi } from './config'
+import { allSchemas, rules, config, ItemRecord } from './config'
 import { propTypes } from '@/utils/propTypes'
 
 const { query } = useRoute()
@@ -19,16 +19,21 @@ const props = defineProps({
   editable: propTypes.bool.def(false)
 })
 
-const config = { getApi, saveApi }
-
 const back = () => {
+  push({ name: `${props.nameCode}List` })
+}
+
+const save = () => {
   push({ name: `${props.nameCode}List` })
 }
 </script>
 
 <template>
   <ContentDetailWrap
-    :title="t(`rest.${nameCode}`) + (editable ? t('exampleDemo.edit') : t('exampleDemo.detail'))"
+    :title="
+      t(`rest.${nameCode}`) +
+      (!id ? t('exampleDemo.add') : editable ? t('exampleDemo.edit') : t('exampleDemo.detail'))
+    "
     @back="back"
   >
     <RestfulEdit
@@ -40,8 +45,9 @@ const back = () => {
       :detail-schema="allSchemas.detailSchema"
       :rules="rules"
       action-to="#_actions-to_"
+      @save="save"
     >
-      <template #importance="{ row }: { row }">
+      <template #importance="{ row }: { row: ItemRecord }">
         <ElTag
           :type="row.importance === 1 ? 'success' : row.importance === 2 ? 'warning' : 'danger'"
         >
@@ -55,7 +61,7 @@ const back = () => {
         </ElTag>
       </template>
 
-      <template #content="{ row }: { row }">
+      <template #content="{ row }: { row: ItemRecord }">
         <div v-html="row.content"></div>
       </template>
     </RestfulEdit>

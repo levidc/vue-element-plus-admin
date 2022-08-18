@@ -173,7 +173,6 @@ export default defineComponent({
       // 单独给只有options属性的组件做判断
       const notRenderOptions = ['SelectV2', 'Cascader', 'Transfer']
       const slotsMap: Recordable = {
-        // slot自定义结构
         ...setItemComponentSlots(slots, item?.componentProps?.slots, item.field)
       }
       if (

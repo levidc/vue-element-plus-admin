@@ -50,6 +50,8 @@ let deleteArr = ref<deleteArray[]>([])
 
 const handleDelete = (data) => {
   disabledBtn.value = data.length == 0
+  console.log(deleteArr, 123)
+
   deleteArr.value = [].concat(data)
 }
 const NASs = ref()
@@ -69,9 +71,9 @@ const DBSs = ref()
       <ElTabPane :label="t('externalStorage.NAS')" name="NAS">
         <NAS v-if="activeName === 'NAS'" @disable="handleDelete" ref="NASs" />
       </ElTabPane>
-      <ElTabPane :label="t('externalStorage.DBS')" name="DBS">
+      <!-- <ElTabPane :label="t('externalStorage.DBS')" name="DBS">
         <DBS v-if="activeName === 'DBS'" @disable="handleDelete" ref="DBSs" />
-      </ElTabPane>
+      </ElTabPane> -->
     </ElTabs>
   </ContentWrap>
 

@@ -3,13 +3,25 @@ import { useValidator } from '@/hooks/web/useValidator'
 import { ContentWrap } from '@/components/ContentWrap'
 import { useI18n } from '@/hooks/web/useI18n'
 import { Dialog } from '@/components/Dialog'
-import { ElButton, ElDropdown, ElDropdownMenu, ElTag, ElCascaderPanel } from 'element-plus'
+import {
+  ElButton,
+  ElDropdown,
+  ElDropdownMenu,
+  ElTag,
+  ElCascaderPanel,
+  ElTable,
+  ElTableColumn,
+  ElSelect,
+  ElOption,
+  ElInput,
+  ElMessageBox
+} from 'element-plus'
 import { useForm } from '@/hooks/web/useForm'
 import { Form } from '@/components/Form'
-import { mockNFS } from '@/api/storageManagement'
+import { mockNFS, getOption } from '@/api/storageManagement'
 import { delTableListApi } from '@/api/table'
 import { Search } from '@/components/Search'
-import { ref, reactive, computed, h, watch, unref, nextTick } from 'vue'
+import { ref, reactive, computed, h, watch, unref } from 'vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
@@ -18,6 +30,42 @@ const { t } = useI18n()
 const { required } = useValidator()
 
 const TableR = ref()
+
+const permission = [
+  {
+    label: '只读',
+    value: 'read'
+  },
+  {
+    label: '只写',
+    value: 'write'
+  }
+]
+
+// ref value 可调用方法
+let initAddClient = ref([
+  {
+    ip: '测试',
+    permission: '' //驱动
+  }
+])
+
+//表格数据绑定 与 ref不同步？
+const addDeny = () => {
+  console.log(initAddClient, '123')
+  // let temp = [].concat(initAddClient.value)
+  // initAddClient.value = temp.concat({ ip: '', permission: '' })
+  initAddClient.value.push({ ip: '', permission: '' })
+}
+
+const handleDelete = (index: number, row: any) => {
+  initAddClient.value.splice(index, 1)
+  console.log(index, row, 'scoped')
+}
+
+const getTable = () => {
+  console.log(initAddClient)
+}
 
 const disabledDel = ref(true)
 
@@ -28,12 +76,7 @@ const options = [
     children: [
       {
         value: 'set',
-        label: '设置NFS共享',
-        children: [
-          { value: 'innner1', label: 'inner1' },
-          { value: 'innner2', label: 'inner2' },
-          { value: 'innner3', label: 'inner3' }
-        ]
+        label: '设置NFS共享'
       },
       { value: 'unset', label: '取消NFS共享' },
       { value: 'add', label: '添加客户端' },
@@ -177,7 +220,8 @@ const overviewColumn = [
       },
       component: 'Select',
       componentProps: {
-        options: []
+        options: [],
+        placeholder: '请选择服务器'
       },
       colProps: {
         span: 24
@@ -196,7 +240,8 @@ const overviewColumn = [
       },
       component: 'Select',
       componentProps: {
-        options: []
+        options: [],
+        placeholder: '请选择IP地址'
       },
       colProps: {
         span: 14
@@ -215,64 +260,34 @@ const overviewColumn = [
       },
       component: 'Input',
       componentProps: {
-        placeholder: '123'
+        placeholder: '1024'
       }
     }
   }
 ]
+let reS = []
+const asyncoptions = async () => {
+  let msg = await getOption()
+  reS.length == 0 && reS.push(...msg)
+  // 接口获取option
+}
 
+// 页面加载执行一次
+// 判断dialog显示调用获取option
 const formReflect = {
   set: [
     {
       field: 'field1',
-      label: t('formDemo.input'),
-      component: 'Input',
-      formItemProps: {
-        rules: [required()]
-      }
-    },
-    {
-      field: 'field2',
-      label: 'set',
+      label: '选择NFS网关',
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: 'option1',
-            value: '1'
-          },
-          {
-            label: 'option2',
-            value: '2'
-          }
-        ]
-      }
-    }
-  ],
-  unset: [
-    {
-      field: 'field1',
-      label: 'unset',
-      component: 'Input',
+        options: reS
+      },
+      colProps: {
+        span: 24
+      },
       formItemProps: {
         rules: [required()]
-      }
-    },
-    {
-      field: 'field2',
-      label: t('formDemo.select'),
-      component: 'Select',
-      componentProps: {
-        options: [
-          {
-            label: 'option1',
-            value: '1'
-          },
-          {
-            label: 'option2',
-            value: '2'
-          }
-        ]
       }
     }
   ],
@@ -343,6 +358,7 @@ const { setValues } = methodForm
 // console.log(crudSchemas, 'allSchemas', allSchemas)
 
 const createFlag = ref(false)
+const addClientFlag = ref(false)
 
 // 级联触发方式、默认click
 enum ExpandTrigger {
@@ -383,6 +399,7 @@ const formSubmit = () => {
       console.log(formModel, '123', formRef.value)
       if (valid) {
         console.log('submit success')
+        // case btn.value => 对应api
       } else {
         console.log('submit fail')
       }
@@ -397,18 +414,7 @@ const renderForm = computed(() => {
   } else if (pane.value === 'add') {
     // let { formModel } = formRef.value
     // console.log(formModel, '123', formRef.value)
-    // console.log(TableR.value.selections[0], 'selected')
-    // nextTick(() => {
-    //   console.log(formRef.value.formModel, '133')
-    //   // setValues({
-    //   //   field1: '123'
-    //   // })
-    //   // setValues无效
     //   formRef.value.formModel.field1 = '123'
-    // })
-    // formRef.value.setValues({
-    //   field1: 'testAddd'
-    // })
     formRef?.value?.setValues({
       field1: 'nolonger'
     })
@@ -423,6 +429,7 @@ watch(
   () => TableR.value?.selections,
   (val) => {
     disableSingle.value = val.length !== 1
+    disabledDel.value = val?.[0]?.clientCount > 100
   }
 )
 watch(
@@ -431,18 +438,33 @@ watch(
     if (!val) {
       // list
       getList()
+    } else {
+      if (btn.value === 'set') {
+        // 刷新option
+        asyncoptions()
+      }
     }
   }
 )
+
+// 重置添加客户端信息
 watch(
-  () => TableR.value?.selections,
+  () => addClientFlag.value,
   (val) => {
-    console.log(val, '多选框')
-    // 禁用级联面板控制
-    disabledDel.value = val?.[0]?.clientCount > 100
-    console.log(disabledDel.value)
+    if (val) {
+      initAddClient.value = [
+        {
+          ip: '测试',
+          permission: 'write' //驱动
+        }
+      ]
+    } else {
+      getList()
+    }
   }
 )
+
+// 匹配title返回
 function getTitles(arr) {
   const temp = []
   for (let i = 0; i < arr.length; i++) {
@@ -458,6 +480,9 @@ function getTitles(arr) {
 const allTiltle = getTitles(options)
 
 const getTitle = computed(() => {
+  if (pane.value === 'create') {
+    return '创建NFS网关'
+  }
   const title = allTiltle.filter((item) => item.value == btn.value)?.[0]
   return title?.label
 })
@@ -468,6 +493,32 @@ const getPane = (val: string | number | void) => {
     btn.value = val
     // dropdown关闭
     // dropdown.value.handleClose()
+    if (val === 'add') {
+      addClientFlag.value = true
+      return
+    } else if (val === 'unset') {
+      console.log(123)
+
+      // return ElMessageBox.confirm('取消NFS共享?', t('common.reminder'), {
+      //   confirmButtonText: t('common.ok'),
+      //   cancelButtonText: t('common.cancel'),
+      //   type: 'warning'
+      // }).then(() => {
+      //   console.log('123')
+      // })
+    } else if (val === 'delete') {
+      return ElMessageBox.confirm(
+        '删除存储桶?' + TableR.value.selections[0].name,
+        t('common.reminder'),
+        {
+          confirmButtonText: t('common.ok'),
+          cancelButtonText: t('common.cancel'),
+          type: 'warning'
+        }
+      ).then(() => {
+        console.log('123')
+      })
+    }
     createFlag.value = true
   }
 }
@@ -505,11 +556,6 @@ const getPane = (val: string | number | void) => {
         @search="setSearchParams"
         @reset="setSearchParams"
       />
-      <!-- <div>
-        <ElTabs type="card" v-model="activeName" @tab-click="handleClick">
-          <ElTabPane label="总览" name="overview" />
-        </ElTabs>
-      </div> -->
     </div>
 
     <Table
@@ -526,7 +572,7 @@ const getPane = (val: string | number | void) => {
     />
   </ContentWrap>
   <Dialog v-model="createFlag" :title="getTitle" :max-height="300" width="40%">
-    <ContentWrap>
+    <ContentWrap title="NFS共享" message="设置NFS网关共享后,存储桶不允许开启多版本功能;">
       <Form ref="formRef" :schema="renderForm" />
     </ContentWrap>
     <template #footer>
@@ -534,8 +580,43 @@ const getPane = (val: string | number | void) => {
       <ElButton @click="createFlag = false">{{ t('dialogDemo.close') }}</ElButton>
     </template>
   </Dialog>
+
+  <Dialog v-model="addClientFlag" title="添加客户端" width="40%" :max-height="400">
+    <p>名称:{{ TableR.selections[0].name }}</p>
+
+    <ElTable :data="initAddClient">
+      <ElTableColumn label="客户端IP" prop="ip">
+        <template #default="scope">
+          <ElInput v-model="scope.row.ip" />
+        </template>
+      </ElTableColumn>
+      <ElTableColumn label="访问权限" prop="permission">
+        <template #default="scope">
+          <ElSelect v-model="scope.row.permission" placeholder="选择访问权限" clearable>
+            <ElOption
+              v-for="item in permission"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </ElSelect>
+        </template>
+      </ElTableColumn>
+      <ElTableColumn label="操作">
+        <template #default="scope">
+          <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)"
+            ><Icon icon="ep:close-bold" />
+          </el-button>
+        </template>
+      </ElTableColumn>
+    </ElTable>
+    <ElButton @click="addDeny" text type="success"> <Icon icon="ep:plus" />添加 </ElButton>
+    <template #footer>
+      <ElButton type="primary" @click="getTable">添加</ElButton>
+    </template>
+  </Dialog>
 </template>
-<style>
+<style scoped>
 .el-cascader-panel.is-bordered {
   border: none;
 }
