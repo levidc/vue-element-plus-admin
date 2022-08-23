@@ -23,18 +23,18 @@ const props = defineProps({
   },
   stepsProps: {
     type: Object as PropType<Recordable>,
-    default: () => {}
+    default: () => ({})
   },
   formProps: {
     type: Object as PropType<Recordable>,
-    default: () => {}
+    default: () => ({})
   },
   actionPlacement: propTypes.string
     .validate((v: string) => ['top', 'bottom'].includes(v))
     .def('top'),
   rules: {
     type: Object as PropType<Recordable>,
-    default: () => {}
+    default: () => ({})
   },
   dividerHeight: propTypes.string.def('50px'),
   btnDownText: propTypes.string

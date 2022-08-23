@@ -16,12 +16,20 @@ type DescriptionsProps = {
 } & Recordable
 
 declare global {
+  declare type RestfulOrder = { orderField?: string; orderType?: 'asc' | 'desc' }
+
   declare type UseTableConfigX<T = any> = UseTableConfig<T> & {
+    idCol: string
     getApi: (id: string) => Promise<IResponse<T>>
     saveApi: (data: Partial<T>) => Promise<IResponse<T>>
+    response: {
+      get?: string
+    }
     use?: {
       virtualPage?: boolean
       virtualPageDelay?: number
+      autoRefresh?: boolean
+      autoRefreshDelay?: number
     }
     formProps?: FormProps
     descProps?: DescriptionsProps

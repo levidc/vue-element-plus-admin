@@ -30,6 +30,7 @@ export const getApi = getTableDetApi
 // d）可通过virtualFilterMethod来替换默认的排序方式：virtualFilterMethod:(value,row,column)=>{return true/false}
 //    有多个检索字段时，virtualFilterMethod可能会调用多次，只要有一次返回false，此数据就不会出现在最终列表中
 export const config: UseTableConfigX<ItemRecord> = {
+  idCol: 'id',
   getListApi,
   delListApi,
   getApi,

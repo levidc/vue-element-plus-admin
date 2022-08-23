@@ -26,7 +26,7 @@ export const getRoutes = (parentPath: string) => {
         noTagsView: true,
         noCache: true,
         hidden: true,
-        showMainRoute: true,
+        canTo: true,
         activeMenu: `${parentPath}/restful-list`
       },
       props: {
@@ -43,7 +43,7 @@ export const getRoutes = (parentPath: string) => {
         noTagsView: true,
         noCache: true,
         hidden: true,
-        showMainRoute: true,
+        canTo: true,
         activeMenu: `${parentPath}/restful-list`
       },
       props: {
@@ -60,7 +60,7 @@ export const getRoutes = (parentPath: string) => {
         noTagsView: true,
         noCache: true,
         hidden: true,
-        showMainRoute: true,
+        canTo: true,
         activeMenu: `${parentPath}/restful-list`
       },
       props: {

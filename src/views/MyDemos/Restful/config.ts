@@ -30,13 +30,11 @@ export const getApi = getTableDetApi
 // d）可通过virtualFilterMethod来替换默认的排序方式：virtualFilterMethod:(value,row,column)=>{return true/false}
 //    有多个检索字段时，virtualFilterMethod可能会调用多次，只要有一次返回false，此数据就不会出现在最终列表中
 export const config: UseTableConfigX<ItemRecord> = {
+  idCol: 'id',
   getListApi,
   delListApi,
   getApi,
   saveApi,
-  use: {
-    virtualPage: true
-  },
   response: {
     list: 'list',
     total: 'total'
@@ -75,7 +73,11 @@ const crudSchemas = reactive<CrudSchema[]>([
   },
   {
     field: 'author',
-    label: t('tableDemo.author')
+    label: t('tableDemo.author'),
+    sortable: 'custom',
+    search: {
+      show: true
+    }
   },
   {
     field: 'display_time',
@@ -104,26 +106,6 @@ const crudSchemas = reactive<CrudSchema[]>([
             ? t('tableDemo.good')
             : t('tableDemo.commonly')
       )
-    },
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: [
-          {
-            label: '重要',
-            value: 1
-          },
-          {
-            label: '良好',
-            value: 2
-          },
-          {
-            label: '一般',
-            value: 3
-          }
-        ]
-      }
     },
     form: {
       component: 'Select',

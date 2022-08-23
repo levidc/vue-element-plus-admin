@@ -7,11 +7,12 @@ import { ElButton } from 'element-plus'
 // import { get } from 'lodash-es'
 import { Table } from '@/components/Table'
 // import { useTable } from '@/hooks/web/useTable'
-import { useTableX } from '@/hooks/web/useTableX'
+import { useTableX, useSearchDefault, useOrderDefault } from '@/hooks/web/useTableX'
 import { propTypes } from '@/utils/propTypes'
 import { ref, PropType, TeleportProps, onMounted } from 'vue'
 import { useEmitt } from '@/hooks/web/useEmitt'
 import RestfulEdit from './RestfulEdit.vue'
+import { useTimer } from '@/hooks/web/useTimer'
 
 const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('RestfulList')
@@ -23,11 +24,11 @@ const props = defineProps({
   nameCode: propTypes.string.def('CRUD'),
   config: {
     type: Object as PropType<Parameters<typeof useTableX<ItemRecord>>[0]>,
-    default: () => {}
+    default: () => ({})
   },
   types: {
     type: Object,
-    default: () => {}
+    default: () => ({})
   },
   searchSchema: {
     type: Array as PropType<FormSchema[]>,
@@ -47,15 +48,19 @@ const props = defineProps({
   },
   rules: {
     type: Object as PropType<Recordable>,
-    default: () => {}
+    default: () => ({})
   },
   tableHideColumns: {
     type: Array as PropType<String[]>,
     default: () => []
   },
   idCol: propTypes.string.def('id'),
+  defaultSearch: Object as PropType<Recordable>,
+  defaultOrder: Object as PropType<RestfulOrder>,
   virtualPage: propTypes.bool.def(false),
   virtualPageDelay: propTypes.number.def(250),
+  autoRefresh: propTypes.bool.def(false),
+  autoRefreshDelay: propTypes.number.def(10000),
   dialog: propTypes.bool.def(false),
   dialogWidth: propTypes.string.def('60%'),
   actionsTo: undefined as unknown as PropType<TeleportProps['to']>,
@@ -71,6 +76,8 @@ const props = defineProps({
   hideBtnDelItem: propTypes.bool.def(false)
 })
 
+const idColumn = props.config?.idCol || props.idCol
+
 const emit = defineEmits<{
   (e: 'add'): void
   (e: 'edit', row: ItemRecord): void
@@ -78,7 +85,7 @@ const emit = defineEmits<{
   (e: 'save', row: ItemRecord): void
 }>()
 
-const { register, tableObject, methods } = useTableX<ItemRecord>(
+const { register, tableObject, methods, elTableRef } = useTableX<ItemRecord>(
   {
     ...props.config,
     use: {
@@ -91,7 +98,21 @@ const { register, tableObject, methods } = useTableX<ItemRecord>(
 
 const { getList, setSearchParams } = methods
 
-getList()
+const { searchSchemaWithDefault } = useSearchDefault(
+  props.searchSchema,
+  tableObject,
+  props.defaultSearch
+)
+
+const { getDefaultOrderedList, mergeDefaultOrder } = useOrderDefault(
+  props.tableColumns,
+  tableObject,
+  elTableRef,
+  getList,
+  props.defaultOrder
+)
+
+getDefaultOrderedList()
 
 useEmitt({
   name: `${props.nameCode}List`,
@@ -121,8 +142,8 @@ const delData = async (row: ItemRecord | null, multiple: boolean) => {
   delLoading.value = true
   await delList(
     multiple
-      ? selections.map((v) => v[props.idCol])
-      : [(tableObject.currentRow || {})[props.idCol] as string],
+      ? selections.map((v) => v[idColumn])
+      : [(tableObject.currentRow || {})[idColumn] as string],
     multiple
   ).finally(() => {
     delLoading.value = false
@@ -131,25 +152,24 @@ const delData = async (row: ItemRecord | null, multiple: boolean) => {
 
 const onAction = (row: ItemRecord, type: string) => {
   if (props.dialog) {
-    openEditDialog(type, row[props.idCol])
+    openEditDialog(type, row[idColumn])
     return
   }
   emit(type as any, row)
 }
 
-const onSearchChange = (param: Recordable) => {
-  console.log(param, 'delData')
+const onSearchChange = (param: Recordable = {}) => {
   setSearchParams(
     Object.keys(param).reduce((prev, k) => {
-      prev[k] = param[k] || null
+      prev[k] = param[k] !== '' ? param[k] : null
       return prev
     }, {})
   )
 }
 
 const onSortChange = ({ prop, order }) => {
-  order = order == 'ascending' ? 'asc' : order == 'descending' ? 'desc' : null
-  setSearchParams({ orderField: prop || null, orderType: prop && order ? order : null })
+  order = order ? order.replace('ending', '') : null
+  setSearchParams(mergeDefaultOrder({ orderField: prop, orderType: order }))
 }
 
 const mounted = ref(false)
@@ -180,16 +200,28 @@ const saveAction = (row: ItemRecord) => {
 }
 
 const removeEditTag = (tag: string | number) => tag.toString().replace(/^edit-/, '')
+
+if (props.config?.use?.autoRefresh || props.autoRefresh) {
+  const { callTimes } = useTimer(() => {
+    methods.setNeedReload()
+    getList()
+    tableObject.loading = false
+    console.info('Refresh', callTimes.value)
+  }, props.config?.use?.autoRefreshDelay || props.autoRefreshDelay)
+}
 </script>
 
 <template>
   <div :class="[prefixCls]" class="flex flex-col">
-    <Search
-      v-if="!hideSearch && searchPosition == 'top'"
-      :schema="searchSchema"
-      @search="onSearchChange"
-      @reset="onSearchChange"
-    />
+    <div class="search">
+      <Search
+        v-if="!hideSearch && searchPosition == 'top'"
+        :schema="searchSchemaWithDefault"
+        class="search"
+        @search="onSearchChange"
+        @reset="onSearchChange"
+      />
+    </div>
 
     <div class="flex align-bottom">
       <div v-if="!hideAction" class="mb-10px">
@@ -212,8 +244,12 @@ const removeEditTag = (tag: string | number) => tag.toString().replace(/^edit-/,
         v-if="!hideSearch && searchPosition == 'right'"
         class="w-px flex-grow ml-100px overflow-x-hidden"
       >
-        <div class="flex justify-end" style="width: calc(100% + 32px)">
-          <Search :schema="searchSchema" @search="onSearchChange" @reset="onSearchChange" />
+        <div class="search flex justify-end" style="width: calc(100% + 32px)">
+          <Search
+            :schema="searchSchemaWithDefault"
+            @search="onSearchChange"
+            @reset="onSearchChange"
+          />
         </div>
       </div>
     </div>
@@ -294,3 +330,17 @@ const removeEditTag = (tag: string | number) => tag.toString().replace(/^edit-/,
     </Dialog>
   </div>
 </template>
+
+<style lang="less" scoped>
+@prefix-cls: ~'@{namespace}-RestfulList';
+
+.@{prefix-cls} {
+  .search {
+    :deep(.el-form) {
+      .el-input {
+        width: 190px;
+      }
+    }
+  }
+}
+</style>

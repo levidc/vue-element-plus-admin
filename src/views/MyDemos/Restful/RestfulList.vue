@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ContentWrap } from '@/components/ContentWrap'
 import { RestfulList } from '@/components/RestfulPage'
+import { PropType } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from '@/hooks/web/useI18n'
 import { propTypes } from '@/utils/propTypes'
@@ -16,18 +17,19 @@ defineOptions({
 })
 
 const props = defineProps({
-  nameCode: propTypes.string.isRequired
+  nameCode: propTypes.string.isRequired,
+  search: Object as PropType<Recordable>,
+  order: Object as PropType<RestfulOrder>
 })
 
 const onAdd = () => {
   push({ name: `${props.nameCode}Add` })
 }
 const onEdit = (row: ItemRecord) => {
-  console.log(row, 'row')
-  push({ name: `${props.nameCode}Edit`, query: { id: row.id } })
+  push({ name: `${props.nameCode}Edit`, query: { id: row[config.idCol] } })
 }
 const onDetail = (row: ItemRecord) => {
-  push({ name: `${props.nameCode}Detail`, query: { id: row.id } })
+  push({ name: `${props.nameCode}Detail`, query: { id: row[config.idCol] } })
 }
 </script>
 
@@ -41,10 +43,11 @@ const onDetail = (row: ItemRecord) => {
       :form-schema="allSchemas.formSchema"
       :detail-schema="allSchemas.detailSchema"
       :rules="rules"
+      :default-search="search"
+      :default-order="order"
       @add="onAdd"
       @edit="onEdit"
       @detail="onDetail"
-      dialog
     >
       <template #expand="data">
         <div class="ml-30px">

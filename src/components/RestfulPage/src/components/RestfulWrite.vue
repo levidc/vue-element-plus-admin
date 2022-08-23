@@ -20,11 +20,11 @@ const props = defineProps({
   },
   rules: {
     type: Object as PropType<Recordable>,
-    default: () => {}
+    default: () => ({})
   },
   config: {
     type: Object as PropType<FormProps>,
-    default: () => {}
+    default: () => ({})
   }
 })
 

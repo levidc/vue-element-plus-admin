@@ -30,7 +30,7 @@ declare interface AxiosConfig {
   data?: any
   url?: string
   method?: AxiosMethod
-  headersType?: string | AxiosHeaders
+  headersType?: string
   responseType?: AxiosResponseType
   transformRequest?: (data) => string
 }

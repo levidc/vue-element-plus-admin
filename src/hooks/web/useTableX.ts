@@ -1,6 +1,9 @@
 import { config as axiosConfig } from '@/config/axios/config'
 import { useTable } from '@/hooks/web/useTable'
+import { isNullOrUnDef } from '@/utils/is'
+import { ElTable } from 'element-plus'
 import { get } from 'lodash-es'
+import { computed, nextTick, onMounted, Ref } from 'vue'
 
 const sameObj = (obj1: Recordable, obj2: Recordable) => {
   const o1 = Object.keys(obj1).reduce((prev, k) => {
@@ -146,7 +149,7 @@ export const useTableX = <T = any>(config?: UseTableConfigX<T>, tableColumns?: T
           if (vtSortParam) {
             const sortFunc = virtualSortMethodColumns[vtSortParam['orderField']]
               ? virtualSortMethodColumns[vtSortParam['orderField']].virtualSortMethod
-              : (a, b) => {
+              : (a: string, b: string) => {
                   if (a < b) return -1
                   if (a > b) return 1
                   return 0
@@ -195,4 +198,72 @@ export const useTableX = <T = any>(config?: UseTableConfigX<T>, tableColumns?: T
     willReload = true
   }
   return { ...useHandler, methods: { ...useHandler.methods, setNeedReload } }
+}
+
+export const useSearchDefault = <T extends { params: any }>(
+  searchSchema: FormSchema[],
+  tableObject: T,
+  defaultSearch?: Recordable
+) => {
+  const searchSchemaWithDefault = computed<FormSchema[]>(() => {
+    return defaultSearch
+      ? searchSchema.map((tc) => {
+          if (
+            tc.field &&
+            defaultSearch &&
+            tc.field in defaultSearch &&
+            !isNullOrUnDef(defaultSearch[tc.field])
+          ) {
+            tc.value = defaultSearch[tc.field]
+          }
+          return tc
+        })
+      : searchSchema
+  })
+  if (defaultSearch) {
+    tableObject.params = Object.assign(tableObject.params, defaultSearch)
+  }
+
+  return { searchSchemaWithDefault }
+}
+
+export const useOrderDefault = <T extends { params: any }>(
+  tableColumns: TableColumn[],
+  tableObject: T,
+  elTableRef: Ref<ComponentRef<typeof ElTable> | undefined>,
+  getList: () => Promise<void>,
+  defaultOrder?: RestfulOrder
+) => {
+  const allColumns = listTableColumnWithCol(tableColumns, 'field')
+  const defOrder: Required<RestfulOrder> = { orderField: '', orderType: 'asc', ...defaultOrder }
+  let getDefaultOrderedList = () => {}
+
+  if (defOrder.orderField) {
+    tableObject.params = Object.assign(tableObject.params, defOrder)
+    if (defOrder.orderField in allColumns) {
+      getDefaultOrderedList = () => {
+        onMounted(() => {
+          nextTick(() => {
+            defOrder?.orderField &&
+              elTableRef.value?.sort(defOrder.orderField, defOrder.orderType + 'ending')
+          })
+        })
+      }
+    } else {
+      getDefaultOrderedList = getList
+    }
+  } else {
+    getDefaultOrderedList = getList
+  }
+
+  const mergeDefaultOrder = (order: RestfulOrder) => {
+    const def = { orderType: 'asc' }
+    const defOdr = defaultOrder?.orderField
+      ? { ...def, ...defaultOrder }
+      : { orderField: null, orderType: null }
+    const odr = order?.orderField ? { ...def, ...order } : {}
+    return { ...defOdr, ...odr }
+  }
+
+  return { getDefaultOrderedList, mergeDefaultOrder }
 }
