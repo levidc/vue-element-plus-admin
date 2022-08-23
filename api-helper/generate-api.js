@@ -1,8 +1,8 @@
 const { generate } = require('./generate')
 const path = require('path')
 
-// const dist = 'src/api'
-const dist = 'api-helper/dist'
+const dist = 'src/api'
+// const dist = 'api-helper/dist'
 
 const apis = {
   DBS: {
@@ -64,7 +64,7 @@ const apis = {
     }
   },
   FS: {
-    api: 'http://10.0.3.216:8099/v2/api-docs',
+    api: 'http://10.0.3.221:8099/v2/api-docs',
     tags: {
       'apply-nfs-acl-relationship-controller': 'NfsAcl',
       'apply-samba-acl-relationship-controller': 'SambaAcl',
@@ -91,15 +91,13 @@ const apis = {
       'remove-samba-acl-controller': 'SambaAcl',
       'remove-samba-gateway-controller': 'SambaGateway',
       '外部NAS/DBS资源': 'ExternalStorage',
-      '对象存储资源': 'ObjectStorage',
+      对象存储资源: 'ObjectStorage'
     },
-    ignorePaths: [
-      '/error'
-    ]
+    ignorePaths: ['/error']
   }
 }
 
-function doGenerate (name, modular) {
+function doGenerate(name, modular) {
   generate(
     apis[name].api,
     modular

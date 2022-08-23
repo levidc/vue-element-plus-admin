@@ -34,6 +34,9 @@ export const config: UseTableConfigX<ItemRecord> = {
   delListApi,
   getApi,
   saveApi,
+  use: {
+    virtualPage: true
+  },
   response: {
     list: 'list',
     total: 'total'
@@ -102,6 +105,26 @@ const crudSchemas = reactive<CrudSchema[]>([
             : t('tableDemo.commonly')
       )
     },
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        options: [
+          {
+            label: '重要',
+            value: 1
+          },
+          {
+            label: '良好',
+            value: 2
+          },
+          {
+            label: '一般',
+            value: 3
+          }
+        ]
+      }
+    },
     form: {
       component: 'Select',
       componentProps: {
@@ -128,6 +151,15 @@ const crudSchemas = reactive<CrudSchema[]>([
     form: {
       component: 'InputNumber',
       value: 0
+    },
+    sortable: 'custom',
+    virtualFilterMethod: (value, row, column) => {
+      console.log(value, 'value', row)
+      return value
+    },
+    virtualSortMethod: (a, b) => {
+      console.log(a, b)
+      return a - b
     }
   },
   {

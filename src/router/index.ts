@@ -5,7 +5,7 @@ import { Layout, getParentLayout } from '@/utils/routerHelper'
 import { useI18n } from '@/hooks/web/useI18n'
 
 import { getRoutes as getRestfulRoutes } from '@/views/MyDemos/Restful/routes'
-
+import { getRoutes as ObjectResourceRoute } from '@/views/ResourceManagement/ObjectResource/routes'
 const { t } = useI18n()
 
 const demoRouterMap: AppRouteRecordRaw[] = [
@@ -144,7 +144,8 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
           title: '对象存储',
           noCache: true
         }
-      }
+      },
+      ...ObjectResourceRoute('/resourceManagement')
     ]
   },
   {

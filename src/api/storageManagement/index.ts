@@ -3,15 +3,15 @@ const request = useAxios()
 
 export const mockNFS = async (): Promise<IResponse> => {
   const res = await request.get({
-    url: 'api/posts/1/comments'
+    url: 'api/fs/listObjectStorageResource'
   })
-  res.data.forEach((item, i) => {
-    item.ipPort = parseFloat(Math.random().toFixed(2))
-    item.clientCount = Math.pow(10, i)
-    item.applyBucketCount = Math.log10(Math.pow(10, i))
-    item.updateTime = new Date().getTime() + 1000 * i
-  })
-  return { code: '0', data: { ...res, total: res.data.length } }
+  return {
+    code: '0',
+    data: {
+      data: res.data.storageResources,
+      total: res.data.storageResources.length
+    }
+  }
 }
 
 export const getOption = async (): Promise<IResponse> => {

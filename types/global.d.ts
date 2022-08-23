@@ -30,8 +30,9 @@ declare interface AxiosConfig {
   data?: any
   url?: string
   method?: AxiosMethod
-  headersType?: string
+  headersType?: string | AxiosHeaders
   responseType?: AxiosResponseType
+  transformRequest?: (data) => string
 }
 
 declare interface IResponse<T = any> {

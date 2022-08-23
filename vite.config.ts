@@ -118,10 +118,10 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       port: 4000,
       proxy: {
         // 选项写法
-        '/api': {
-          target: 'http://10.0.3.216:8099/',
+        '/fs': {
+          target: 'http://10.0.3.221:8099/',
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, '')
+          rewrite: path => path.replace(/^\/fs/, '/fs/')
         }
       },
       hmr: {

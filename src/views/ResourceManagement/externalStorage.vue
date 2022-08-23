@@ -50,7 +50,7 @@ let deleteArr = ref<deleteArray[]>([])
 
 const handleDelete = (data) => {
   disabledBtn.value = data.length == 0
-  console.log(deleteArr, 123)
+  // console.log(deleteArr, 123)
 
   deleteArr.value = [].concat(data)
 }

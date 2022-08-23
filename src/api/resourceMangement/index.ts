@@ -3,10 +3,8 @@ const request = useAxios()
 
 export const checkRedisStatus = async (): Promise<IResponse> => {
   const res = await request.get({
-    url: 'api/fs/listObjectStorageResource'
+    url: '/fs/listObjectStorageResource'
   })
-  console.log(res, 'res')
-
   return {
     code: '0',
     data: {
@@ -20,6 +18,13 @@ export const checkTikvStatus = async (): Promise<IResponse> => {
   const res = await request.get({
     url: 'api/users'
   })
-  console.log(res, '123')
   return { code: '0', data: { ...res, total: res.data.length } }
+}
+
+export const addObjectStorageResource = async (data: any) => {
+  const res = await request.post({
+    url: 'api/fs/addObjectStorageResource',
+    data
+  })
+  return res
 }

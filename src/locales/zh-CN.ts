@@ -458,5 +458,15 @@ export default {
     ipPort: '网关地址及端口',
     clientCount: '客户端数',
     applyBucketCount: '应用存储桶数'
+  },
+  enumerable: {
+    PERFOR_NULL: '空',
+    HIGH: '高',
+    MIDDLE: '中',
+    LOW: '低'
+  },
+  rest: {
+    ObjectResource: '对象资源',
+    ObjectResourceDes: '对象资源管理'
   }
 }
