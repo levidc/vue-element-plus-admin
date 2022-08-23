@@ -4,7 +4,11 @@ import { useValidator } from '@/hooks/web/useValidator'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getTableListApi, delTableListApi, saveTableApi, getTableDetApi } from '@/api/table'
 import { TableData } from '@/api/table/types'
-import { listObjectStorageResource } from '@/api/fs/ObjectStorage'
+import {
+  listObjectStorageResource,
+  addObjectStorageResource,
+  removeObjectStorageResource
+} from '@/api/fs/ObjectStorage'
 const { t } = useI18n()
 const { required } = useValidator()
 
@@ -17,8 +21,8 @@ const { required } = useValidator()
 // TODO 3）配置数据记录类型和增删改查接口
 export type ItemRecord = TableData // 若没有类型，默认可设置为：Recordable
 export const getListApi = listObjectStorageResource
-export const delListApi = delTableListApi
-export const saveApi = saveTableApi
+export const delListApi = removeObjectStorageResource
+export const saveApi = addObjectStorageResource
 export const getApi = getTableDetApi
 
 // 虚拟分页配置方式
@@ -63,6 +67,9 @@ export const config: UseTableConfigX<ItemRecord> = {
   response: {
     list: 'storageResources',
     total: 'total'
+  },
+  use: {
+    virtualPage: true
   }
 }
 
@@ -72,6 +79,13 @@ const crudSchemas = reactive<CrudSchema[]>([
     label: t('externalStorage.name'),
     search: {
       show: true
+    },
+    sortable: 'custom',
+    virtualFilterMethod: (value, row, _) => {
+      return row.storageName.indexOf(value) > -1
+    },
+    virtualSortMethod: (a, b) => {
+      return a - b
     },
     form: {
       formItemProps: {
@@ -231,18 +245,18 @@ const crudSchemas = reactive<CrudSchema[]>([
         rules: [required()]
       }
     }
+  },
+  {
+    field: 'action',
+    width: '260px',
+    label: t('tableDemo.action'),
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
   }
-  // {
-  //   field: 'action',
-  //   width: '260px',
-  //   label: t('tableDemo.action'),
-  //   form: {
-  //     show: false
-  //   },
-  //   detail: {
-  //     show: false
-  //   }
-  // }
 ])
 
 export const rules = reactive({

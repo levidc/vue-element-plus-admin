@@ -48,11 +48,7 @@ const save = () => {
     }
   })
 }
-const showForm = () => {
-  console.log(createFlag.value, 'createFlag.value')
 
-  createFlag.value = true
-}
 const onAdd = () => {
   push({ name: `${props.nameCode}Add` })
 }
@@ -74,36 +70,28 @@ const onDetail = (row: ItemRecord) => {
       :form-schema="allSchemas.formSchema"
       :detail-schema="allSchemas.detailSchema"
       :rules="rules"
+      :dialog="true"
+      hideBtnDelAll
+      dialogWidth="50%"
       @add="onAdd"
       @edit="onEdit"
       @detail="onDetail"
-      :hideBtnAdd="true"
     >
-      <template #action>
-        <ElButton type="primary" @click="showForm">
-          {{ t('exampleDemo.add') }}
-        </ElButton>
-      </template>
-      <!-- 可定制列表项和扩展项样式 -->
-      <template #expand="data">
-        <div class="ml-30px">
-          <div>{{ t('tableDemo.title') }}：{{ data.row.title }}</div>
-          <div>{{ t('tableDemo.author') }}：{{ data.row.author }}</div>
-          <div>{{ t('tableDemo.displayTime') }}：{{ data.row.display_time }}</div>
-        </div>
+      <template #edit-content="{ row }: { row: ItemRecord }">
+        <div v-html="row.content"></div>
       </template>
     </RestfulList>
   </ContentWrap>
 
-  <Dialog v-model="createFlag" title="创建对象存储资源" :max-height="300">
+  <!-- <Dialog v-model="createFlag" title="创建对象存储资源" :max-height="300">
     <ContentWrap>
       <Write ref="writeRef" :form-schema="allSchemas.formSchema" />
     </ContentWrap>
     <template #footer>
-      <ElButton type="primary" @click="save">
+      <ElButton type="primary" @click="getSave">
         {{ t('exampleDemo.save') }}
       </ElButton>
       <ElButton @click="createFlag = false">{{ t('dialogDemo.close') }}</ElButton>
     </template>
-  </Dialog>
+  </Dialog> -->
 </template>

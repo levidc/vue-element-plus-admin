@@ -138,6 +138,7 @@ const onAction = (row: ItemRecord, type: string) => {
 }
 
 const onSearchChange = (param: Recordable) => {
+  console.log(param, 'delData')
   setSearchParams(
     Object.keys(param).reduce((prev, k) => {
       prev[k] = param[k] || null

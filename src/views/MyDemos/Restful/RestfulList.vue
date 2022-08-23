@@ -23,6 +23,7 @@ const onAdd = () => {
   push({ name: `${props.nameCode}Add` })
 }
 const onEdit = (row: ItemRecord) => {
+  console.log(row, 'row')
   push({ name: `${props.nameCode}Edit`, query: { id: row.id } })
 }
 const onDetail = (row: ItemRecord) => {
@@ -43,6 +44,7 @@ const onDetail = (row: ItemRecord) => {
       @add="onAdd"
       @edit="onEdit"
       @detail="onDetail"
+      dialog
     >
       <template #expand="data">
         <div class="ml-30px">
