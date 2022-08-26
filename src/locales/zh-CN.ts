@@ -41,6 +41,7 @@ export default {
     delCancel: '取消',
     delNoData: '请选择需要删除的数据',
     delSuccess: '删除成功',
+    resSuccess: '操作成功',
     create: '创建',
     delete: '删除',
     status: '状态',
@@ -467,6 +468,7 @@ export default {
   },
   rest: {
     ObjectResource: '对象资源',
-    ObjectResourceDes: '对象资源管理'
+    ObjectResourceDes: '对象资源管理',
+    NFS: 'NFS网关'
   }
 }

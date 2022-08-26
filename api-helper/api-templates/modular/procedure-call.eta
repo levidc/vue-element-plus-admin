@@ -1,5 +1,5 @@
 <%
-const { utils, route, config } = it;
+const { utils, route, config, modelTypes } = it;
 const { requestBodyInfo, responseBodyInfo, specificArgNameResolver } = route;
 const { _, getInlineParseContent, getParseContent, parseSchema, getComponentByRef, require } = utils;
 const { parameters, path, method, payload, query, formData, security, requestParams } = route.request;
@@ -24,9 +24,9 @@ const argToTmpl = ({ name, optional, type, defaultValue }) => `${name}${!default
 const rawWrapperArgs = config.extractRequestParams ?
     _.compact([
         requestParams && {
-          name: pathParams.length ? `{ ${_.join(pathParamsNames, ", ")}, ...${queryName} }` : queryName,
-          optional: false,
-          type: getInlineParseContent(requestParams),
+            name: pathParams.length ? `{ ${_.join(pathParamsNames, ", ")}, ...${queryName} }` : queryName,
+            optional: false,
+            type: getInlineParseContent(requestParams),
         },
         ...(!requestParams ? pathParams : []),
         payload,
@@ -69,14 +69,16 @@ const describeReturnType = () => {
 
     switch(config.httpClientType) {
         case HTTP_CLIENT.AXIOS: {
-          return `Promise<AxiosResponse<${type}>>`
+            return `Promise<AxiosResponse<${type}>>`
         }
         default: {
-          return `Promise<HttpResponse<${type}, ${errorType}>`
+            return `Promise<HttpResponse<${type}, ${errorType}>`
         }
     }
 }
 
+const dataType = (((modelTypes.find(t => t.name==type) || {}).rawContent || []).find(k => k.name=='data') || {}).value
+restype = 'IResponse' + (dataType ? `<${dataType}>`: '')
 %>
 /**
 <%~ routeDocs.description %>
@@ -86,7 +88,7 @@ const describeReturnType = () => {
 <%~ routeDocs.lines %>
 
  */
-export const <%~ route.routeName.usage %> = (<%~ wrapperArgs %>)<%~ config.toJS ? `: ${describeReturnType()}` : `: Promise<${type}>` %> => {
+export const <%~ route.routeName.usage %> = (<%~ wrapperArgs %>)<%~ config.toJS ? `: ${describeReturnType()}` : `: Promise<${restype}>` %> => {
     return request.<%~ _.lowerCase(method) %>({
         url: `<%~ path %>`,
         <%~ queryTmpl ? `params: ${queryTmpl},` : '' %>

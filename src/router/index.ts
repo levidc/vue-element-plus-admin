@@ -6,32 +6,33 @@ import { useI18n } from '@/hooks/web/useI18n'
 
 import { getRoutes as getRestfulRoutes } from '@/views/MyDemos/Restful/routes'
 import { getRoutes as ObjectResourceRoute } from '@/views/ResourceManagement/ObjectResource/routes'
+import { getRoutes as NFSRoute } from '@/views/storageManagement/NFS/routes'
 const { t } = useI18n()
 
 const demoRouterMap: AppRouteRecordRaw[] = [
-  {
-    path: '/my-demos',
-    component: Layout,
-    redirect: '/mydemos/permission-config',
-    name: 'MyDemos',
-    meta: {
-      title: '示例',
-      icon: 'ant-design:thunderbolt-filled',
-      alwaysShow: true
-    },
-    children: [
-      {
-        path: 'permission-config',
-        component: () => import('@/views/MyDemos/PermissionConfig.vue'),
-        name: 'PermissionCfg',
-        meta: {
-          title: '权限配置',
-          noCache: true
-        }
-      },
-      ...getRestfulRoutes('/my-demos')
-    ]
-  }
+  // {
+  //   path: '/my-demos',
+  //   component: Layout,
+  //   redirect: '/mydemos/permission-config',
+  //   name: 'MyDemos',
+  //   meta: {
+  //     title: '示例',
+  //     icon: 'ant-design:thunderbolt-filled',
+  //     alwaysShow: true
+  //   },
+  //   children: [
+  //     {
+  //       path: 'permission-config',
+  //       component: () => import('@/views/MyDemos/PermissionConfig.vue'),
+  //       name: 'PermissionCfg',
+  //       meta: {
+  //         title: '权限配置',
+  //         noCache: true
+  //       }
+  //     },
+  //     ...getRestfulRoutes('/my-demos')
+  //   ]
+  // }
 ]
 
 export const constantRouterMap: AppRouteRecordRaw[] = [
@@ -85,42 +86,43 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
 ]
 
 export const asyncRouterMap: AppRouteRecordRaw[] = [
-  {
-    path: '/dashboard',
-    component: Layout,
-    redirect: '/dashboard/analysis',
-    name: 'Dashboard',
-    meta: {
-      title: t('router.dashboard'),
-      icon: 'ant-design:dashboard-filled',
-      alwaysShow: true
-    },
-    children: [
-      {
-        path: 'analysis',
-        component: () => import('@/views/Dashboard/Analysis.vue'),
-        name: 'Analysis',
-        meta: {
-          title: t('router.analysis'),
-          noCache: true,
-          affix: true
-        }
-      },
-      {
-        path: 'workplace',
-        component: () => import('@/views/Dashboard/Workplace.vue'),
-        name: 'Workplace',
-        meta: {
-          title: t('router.workplace'),
-          noCache: true
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/dashboard',
+  //   component: Layout,
+  //   redirect: '/dashboard/analysis',
+  //   name: 'Dashboard',
+  //   meta: {
+  //     title: t('router.dashboard'),
+  //     icon: 'ant-design:dashboard-filled',
+  //     alwaysShow: true
+  //   },
+  //   children: [
+  //     {
+  //       path: 'analysis',
+  //       component: () => import('@/views/Dashboard/Analysis.vue'),
+  //       name: 'Analysis',
+  //       meta: {
+  //         title: t('router.analysis'),
+  //         noCache: true,
+  //         affix: true
+  //       }
+  //     },
+  //     {
+  //       path: 'workplace',
+  //       component: () => import('@/views/Dashboard/Workplace.vue'),
+  //       name: 'Workplace',
+  //       meta: {
+  //         title: t('router.workplace'),
+  //         noCache: true
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/resourceManagement',
     component: Layout,
     name: 'resourceManagement',
+    redirect: '/resourceManagement/ObjectResource',
     meta: {
       title: t('router.resourceManagement'),
       icon: 'ant-design:ie-square-filled',
@@ -136,15 +138,15 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
       //     noCache: true
       //   }
       // },
-      {
-        path: 'objectResourece',
-        name: 'objectResourece',
-        component: () => import('@/views/ResourceManagement/externalStorage.vue'),
-        meta: {
-          title: '对象存储',
-          noCache: true
-        }
-      },
+      // {
+      //   path: 'objectResourece',
+      //   name: 'objectResourece',
+      //   component: () => import('@/views/ResourceManagement/externalStorage.vue'),
+      //   meta: {
+      //     title: '对象存储',
+      //     noCache: true
+      //   }
+      // },
       ...ObjectResourceRoute('/resourceManagement')
     ]
   },
@@ -158,6 +160,7 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
       alwaysShow: true
     },
     children: [
+      ...NFSRoute('/storageManagement'),
       {
         path: 'bucket',
         name: 'bucket',
@@ -166,16 +169,16 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
           title: '存储桶',
           noCache: true
         }
-      },
-      {
-        path: 'NFS',
-        name: 'NFS',
-        component: () => import('@/views/storageManagement/NFS/index.vue'),
-        meta: {
-          title: t('StorageManager.NFS'),
-          noCache: true
-        }
       }
+      // {
+      //   path: 'NFS1',
+      //   name: 'NFS',
+      //   component: () => import('@/views/storageManagement/NFS/index.vue'),
+      //   meta: {
+      //     title: t('StorageManager.NFS'),
+      //     noCache: true
+      //   }
+      // }
     ]
   },
   {

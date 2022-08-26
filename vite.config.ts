@@ -119,7 +119,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       proxy: {
         // 选项写法
         '/fs': {
-          target: 'http://10.0.3.221:8099/',
+          target: 'http://10.0.3.218:8099/',
           changeOrigin: true,
           rewrite: path => path.replace(/^\/fs/, '/fs/')
         }

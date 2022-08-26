@@ -74,19 +74,9 @@ const options = [
     value: 'nfsShare',
     label: 'NFS共享',
     children: [
-      {
-        value: 'set',
-        label: '设置NFS共享'
-      },
-      { value: 'unset', label: '取消NFS共享' },
       { value: 'add', label: '添加客户端' },
       { value: 'remove', label: '移除客户端' }
     ]
-  },
-  {
-    value: 'delete',
-    label: '删除',
-    disabled: disabledDel //传递到结构上的ref无需value访问
   },
   {
     value: 'test',
@@ -558,18 +548,20 @@ const getPane = (val: string | number | void) => {
       />
     </div>
 
-    <Table
-      ref="TableR"
-      v-model:pageSize="tableObject.pageSize"
-      v-model:currentPage="tableObject.currentPage"
-      :columns="allSchemas.tableColumns"
-      :data="tableData"
-      :loading="tableObject.loading"
-      :pagination="{
-        total: tableObject.total
-      }"
-      @register="register"
-    />
+    <div v-if="false">
+      <Table
+        ref="TableR"
+        v-model:pageSize="tableObject.pageSize"
+        v-model:currentPage="tableObject.currentPage"
+        :columns="allSchemas.tableColumns"
+        :data="tableData"
+        :loading="tableObject.loading"
+        :pagination="{
+          total: tableObject.total
+        }"
+        @register="register"
+      />
+    </div>
   </ContentWrap>
   <Dialog v-model="createFlag" :title="getTitle" :max-height="300" width="40%">
     <ContentWrap title="NFS共享" message="设置NFS网关共享后,存储桶不允许开启多版本功能;">
@@ -616,8 +608,3 @@ const getPane = (val: string | number | void) => {
     </template>
   </Dialog>
 </template>
-<style scoped>
-.el-cascader-panel.is-bordered {
-  border: none;
-}
-</style>

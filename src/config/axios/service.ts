@@ -51,18 +51,21 @@ service.interceptors.request.use(
 // response 拦截器
 service.interceptors.response.use(
   (response: AxiosResponse<any>) => {
+    console.log('123', response)
     if (response.config.responseType === 'blob') {
       // 如果是文件流，直接过
       return response
-    } else if (response.data.code === result_code || '0000') {
+    } else if (Number(response.data.code) === result_code || response.data.code === '0000') {
       return response.data
     } else {
-      ElMessage.error(response.data.message)
+      ElMessage.error(response.data.description)
+      return Promise.reject('123')
     }
   },
+  // error.response.data.message
   (error: AxiosError) => {
     console.log('err' + error) // for debug
-    ElMessage.error(error.message)
+    ElMessage.error(error?.response?.data.message || error.message)
     return Promise.reject(error)
   }
 )

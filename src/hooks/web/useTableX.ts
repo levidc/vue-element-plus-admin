@@ -171,12 +171,13 @@ export const useTableX = <T = any>(config?: UseTableConfigX<T>, tableColumns?: T
           )
         }
 
-        if (!willReload) {
-          setTimeout(() => {
-            loadPageData()
-          }, virtualPageDelay)
-          return
-        }
+        // 刷新list willReload
+        // if (!willReload) {
+        //   setTimeout(() => {
+        //     loadPageData()
+        //   }, virtualPageDelay)
+        //   return
+        // }
 
         args[0] = param
         getListApi(...args)

@@ -6,8 +6,8 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
-import { NfsAclModel, NFSACLRelationShipModel, ResponseModelObject } from './data-contracts'
-import { doRst, request, RequestParams } from './http-client'
+import { NfsAclModel, NFSACLRelationShipModel } from "./data-contracts"
+import { doRst, request, RequestParams } from "./http-client"
 
 /**
  * @description 开启使用nfs网关acl
@@ -20,7 +20,7 @@ import { doRst, request, RequestParams } from './http-client'
 export const applyNfsAclRelationship = (
   nfsaclRelationShipModel: NFSACLRelationShipModel,
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/applyNfsAclRelationship`,
@@ -41,7 +41,7 @@ export const applyNfsAclRelationship = (
 export const cancelNfsAclRelationship = (
   nfsaclRelationShipModel: NFSACLRelationShipModel,
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/cancelNfsAclRelationship`,
@@ -59,10 +59,7 @@ export const cancelNfsAclRelationship = (
  * @summary 创建nfs网关acl
  * @request PUT:/fs/createNfsAcl
  */
-export const createNfsAcl = (
-  nfsaclModel: NfsAclModel,
-  params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+export const createNfsAcl = (nfsaclModel: NfsAclModel, params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/createNfsAcl`,
@@ -83,7 +80,7 @@ export const createNfsAcl = (
 export const getNfsAcl = (
   query: { aclId: number; gatewayId: number },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/getNfsAcl`,
@@ -101,11 +98,7 @@ export const getNfsAcl = (
  * @summary 获取所有nfs网关acl
  * @request GET:/fs/listNfsAcl
  */
-export const listNfsAcl = (
-  query: { gatewayId: number },
-  params: RequestParams = {}
-): Promise<ResponseModelObject> => {
-  console.log(query, 'query')
+export const listNfsAcl = (query: { gatewayId: number }, params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/listNfsAcl`,
@@ -126,7 +119,7 @@ export const listNfsAcl = (
 export const removeNfsAcl = (
   query: { aclId: number; gatewayId: number },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .delete({
       url: `/fs/removeNfsAcl`,

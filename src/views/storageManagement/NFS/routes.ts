@@ -1,14 +1,14 @@
 import { useI18n } from '@/hooks/web/useI18n'
 const { t } = useI18n()
 
-export const nameCode = 'ObjectResource' // 请不要修改
+export const nameCode = 'NFS' // 请不要修改
 
 export const getRoutes = (parentPath: string) => {
   const title = t(`rest.${nameCode}`)
   return [
     {
       path: `${nameCode}`,
-      component: () => import('@/views/ResourceManagement/ObjectResource/ObjectResourceList.vue'),
+      component: () => import('@/views/storageManagement/NFS/NFSList.vue'),
       name: `${nameCode}List`,
       meta: {
         title,

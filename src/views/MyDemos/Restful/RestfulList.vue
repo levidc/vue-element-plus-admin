@@ -45,6 +45,7 @@ const onDetail = (row: ItemRecord) => {
       :rules="rules"
       :default-search="search"
       :default-order="order"
+      dialog
       @add="onAdd"
       @edit="onEdit"
       @detail="onDetail"

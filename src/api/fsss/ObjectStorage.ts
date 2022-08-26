@@ -6,8 +6,8 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
-import { ObjectStorageResourceModel, ResponseModelObject } from './data-contracts'
-import { doRst, request, RequestParams } from './http-client'
+import { ObjectStorageResourceModel } from "./data-contracts"
+import { doRst, request, RequestParams } from "./http-client"
 
 /**
  * @description 添加对象存储资源
@@ -20,7 +20,7 @@ import { doRst, request, RequestParams } from './http-client'
 export const addObjectStorageResource = (
   resourceModel: ObjectStorageResourceModel,
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .post({
       url: `/fs/addObjectStorageResource`,
@@ -41,11 +41,11 @@ export const addObjectStorageResource = (
 export const getObjectStorageResource = (
   query: { storageId: number },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/getObjectStorageResource`,
-      params: { storageId: query.toString() },
+      params: query,
       ...params
     })
     .then((res) => doRst(res))
@@ -59,9 +59,7 @@ export const getObjectStorageResource = (
  * @summary 获取所有对象存储资源
  * @request GET:/fs/listObjectStorageResource
  */
-export const listObjectStorageResource = (
-  params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+export const listObjectStorageResource = (params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/listObjectStorageResource`,
@@ -81,11 +79,11 @@ export const listObjectStorageResource = (
 export const removeObjectStorageResource = (
   query: { storageId: number },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .delete({
       url: `/fs/removeObjectStorageResource`,
-      params: { storageId: query.toString() },
+      params: query,
       ...params
     })
     .then((res) => doRst(res))
@@ -102,7 +100,7 @@ export const removeObjectStorageResource = (
 export const updateObjectStorageResource = (
   resourceModel: ObjectStorageResourceModel,
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .post({
       url: `/fs/updateObjectStorageResource`,

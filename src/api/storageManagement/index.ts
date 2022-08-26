@@ -3,7 +3,7 @@ const request = useAxios()
 
 export const mockNFS = async (): Promise<IResponse> => {
   const res = await request.get({
-    url: 'api/fs/listObjectStorageResource'
+    url: '/fs/listObjectStorageResource'
   })
   return {
     code: '0',

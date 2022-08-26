@@ -64,7 +64,7 @@ const apis = {
     }
   },
   FS: {
-    api: 'http://10.0.3.221:8099/v2/api-docs',
+    api: 'http://10.0.3.218:8099/v2/api-docs',
     tags: {
       'apply-nfs-acl-relationship-controller': 'NfsAcl',
       'apply-samba-acl-relationship-controller': 'SambaAcl',
@@ -93,7 +93,12 @@ const apis = {
       '外部NAS/DBS资源': 'ExternalStorage',
       对象存储资源: 'ObjectStorage'
     },
-    ignorePaths: ['/error']
+    ignorePaths: [
+      '/error',
+      '/1/13{bucketName}',
+      '/11320/545452{bucketName}/**',
+      '/12/12{bucketName}/{objectKey}'
+    ]
   }
 }
 

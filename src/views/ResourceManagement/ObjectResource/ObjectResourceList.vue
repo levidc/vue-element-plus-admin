@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { ContentWrap } from '@/components/ContentWrap'
 import { RestfulList } from '@/components/RestfulPage'
-import { useRouter } from 'vue-router'
+import { ElButton } from 'element-plus'
+import { Dialog } from '@/components/Dialog'
 import { useI18n } from '@/hooks/web/useI18n'
 import { propTypes } from '@/utils/propTypes'
-import { Dialog } from '@/components/Dialog'
 import { allSchemas, rules, config, ItemRecord } from './config'
-import { addObjectStorageResource } from '@/api/fs/ObjectStorage'
+import { updateObjectStorageResource } from '@/api/fs/ObjectStorage'
 import { nameCode as baseNameCode, titleInfo } from './routes'
-import { ElButton } from 'element-plus'
 import Write from './nasForm.vue'
 import { ref, unref } from 'vue'
-const { push } = useRouter()
+import { ElMessage } from 'element-plus'
 const { t } = useI18n()
 
 defineOptions({
@@ -24,46 +23,46 @@ const props = defineProps({
 // Boolean
 const createFlag = ref(false)
 
-console.log(props, 'props')
+const restful = ref()
 
 // ref
+let selectedRow = ref({})
+
 const writeRef = ref<ComponentRef<typeof Write>>()
 
 const save = () => {
   const { getFormData } = writeRef?.value
+  const { getList } = restful?.value
   unref(writeRef?.value?.elFormRef)!.validate(async (isValid) => {
     console.log(isValid)
     if (isValid) {
-      // console.log(writeRef, 'writeRef')
       let data = await getFormData()
       // 获取表单model值
-      data = Object.assign(data, { storageId: 0 })
-      // console.log(writeRef.value, 'save', data)
-      addObjectStorageResource(data).then((res) => {
-        console.log(res, 'addObjectStorageResource')
+      Object.assign({ ...selectedRow.value }, data)
+      console.log('save', data)
+      updateObjectStorageResource(data).then((res) => {
         createFlag.value = false
-        // getList()
+        ElMessage.success(t('common.resSuccess'))
+        getList()
       })
-      // console.log('createNAs')
+      console.log('createNAs')
     }
   })
 }
 
-const onAdd = () => {
-  push({ name: `${props.nameCode}Add` })
-}
-const onEdit = (row: ItemRecord) => {
-  push({ name: `${props.nameCode}Edit`, query: { id: row.id } })
-}
-const onDetail = (row: ItemRecord) => {
-  push({ name: `${props.nameCode}Detail`, query: { id: row.id } })
+const getName = (row: {}) => {
+  createFlag.value = true
+  selectedRow.value = { ...row }
 }
 </script>
 
 <template>
   <ContentWrap :title="t(titleInfo.title)" :message="titleInfo.message">
     <RestfulList
-      :name-code="nameCode"
+      ref="restful"
+      id-col="storageId"
+      modProperty="storageResource"
+      :name-code="props.nameCode"
       :config="config"
       :search-schema="allSchemas.searchSchema"
       :table-columns="allSchemas.tableColumns"
@@ -72,26 +71,31 @@ const onDetail = (row: ItemRecord) => {
       :rules="rules"
       :dialog="true"
       hideBtnDelAll
+      hideBtnDetailItem
+      hideBtnEditItem
       dialogWidth="50%"
-      @add="onAdd"
-      @edit="onEdit"
-      @detail="onDetail"
+      :selection="false"
     >
-      <template #edit-content="{ row }: { row: ItemRecord }">
-        <div v-html="row.content"></div>
+      <template #action-item="{ row }">
+        <ElButton type="primary" @click="getName(row)">修改</ElButton>
       </template>
     </RestfulList>
   </ContentWrap>
 
-  <!-- <Dialog v-model="createFlag" title="创建对象存储资源" :max-height="300">
+  <Dialog v-if="createFlag" v-model="createFlag" title="修改对象存储资源" :max-height="300">
     <ContentWrap>
-      <Write ref="writeRef" :form-schema="allSchemas.formSchema" />
+      <Write
+        ref="writeRef"
+        :form-schema="allSchemas.formSchema"
+        :currentRow="selectedRow"
+        uid="id123"
+      />
     </ContentWrap>
     <template #footer>
-      <ElButton type="primary" @click="getSave">
+      <ElButton type="primary" @click="save">
         {{ t('exampleDemo.save') }}
       </ElButton>
       <ElButton @click="createFlag = false">{{ t('dialogDemo.close') }}</ElButton>
     </template>
-  </Dialog> -->
+  </Dialog>
 </template>

@@ -37,7 +37,9 @@ const { register, methods, elFormRef } = useForm(
 watch(
   () => props.currentRow,
   (currentRow) => {
+    console.log(currentRow, 'currentRow编辑')
     if (!currentRow) return
+    // currentRow, {data,obj:{...}}
     const { setValues } = methods
     setValues(currentRow)
   },

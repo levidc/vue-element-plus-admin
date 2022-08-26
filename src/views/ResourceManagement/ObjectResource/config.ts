@@ -2,15 +2,25 @@ import { h, reactive } from 'vue'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useValidator } from '@/hooks/web/useValidator'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getTableListApi, delTableListApi, saveTableApi, getTableDetApi } from '@/api/table'
+// import { getTableListApi, delTableListApi, saveTableApi, getTableDetApi } from '@/api/table'
 import { TableData } from '@/api/table/types'
 import {
   listObjectStorageResource,
   addObjectStorageResource,
-  removeObjectStorageResource
+  removeObjectStorageResource,
+  getObjectStorageResource
 } from '@/api/fs/ObjectStorage'
 const { t } = useI18n()
 const { required } = useValidator()
+// export type modRow = {
+//   id: string
+//   author: string
+//   title: string
+//   content: string
+//   importance: number
+//   display_time: string
+//   pageviews: number
+// }
 
 // -------- 配置区域开始 -----------------------------------
 // TODO 1）需在src/locales语言文件的“rest”字段下添加以“ObjectResource”和“ObjectResourceDes”为key的语言项
@@ -23,7 +33,7 @@ export type ItemRecord = TableData // 若没有类型，默认可设置为：Rec
 export const getListApi = listObjectStorageResource
 export const delListApi = removeObjectStorageResource
 export const saveApi = addObjectStorageResource
-export const getApi = getTableDetApi
+export const getApi = getObjectStorageResource
 
 // 虚拟分页配置方式
 // a）在config的use中开启virtualPage:true
@@ -173,41 +183,34 @@ const crudSchemas = reactive<CrudSchema[]>([
       return t('enumerable.' + cellValue)
     }
   },
-  {
-    field: 'totalSpace',
-    label: t('common.totalSpace') + '(GB)',
-    form: {
-      show: false
-      // formItemProps: {
-      //   rules: [
-      //     {
-      //       validator: (_, data, cb) => {
-      //         const reg = /^(0|[1-9]\d*)$/
-      //         if (data !== '' && !reg.test(data)) {
-      //           return cb('输入大于等于的正整数')
-      //         } else {
-      //           cb()
-      //         }
-      //       }
-      //     }
-      //   ]
-      // }
-    }
-  },
-  {
-    field: 'usedSpace',
-    label: t('common.usedSpace') + '(GB)',
-    form: {
-      show: false
-    }
-  },
-  {
-    field: 'allocatedSpace',
-    label: '已分配容量',
-    form: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'totalSpace',
+  //   label: t('common.totalSpace') + '(GB)',
+  //   form: {
+  //     // formItemProps: {
+  //     //   rules: [
+  //     //     {
+  //     //       validator: (_, data, cb) => {
+  //     //         const reg = /^(0|[1-9]\d*)$/
+  //     //         if (data !== '' && !reg.test(data)) {
+  //     //           return cb('输入大于等于的正整数')
+  //     //         } else {
+  //     //           cb()
+  //     //         }
+  //     //       }
+  //     //     }
+  //     //   ]
+  //     // }
+  //   }
+  // },
+  // {
+  //   field: 'usedSpace',
+  //   label: t('common.usedSpace') + '(GB)'
+  // },
+  // {
+  //   field: 'allocatedSpace',
+  //   label: '已分配容量' + '(GB)'
+  // },
 
   {
     field: 'url',

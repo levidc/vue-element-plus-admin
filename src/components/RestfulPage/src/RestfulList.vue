@@ -26,9 +26,17 @@ const props = defineProps({
     type: Object as PropType<Parameters<typeof useTableX<ItemRecord>>[0]>,
     default: () => ({})
   },
+  modProperty: {
+    type: String,
+    default: ''
+  },
   types: {
     type: Object,
     default: () => ({})
+  },
+  selection: {
+    type: Boolean,
+    default: false
   },
   searchSchema: {
     type: Array as PropType<FormSchema[]>,
@@ -77,7 +85,6 @@ const props = defineProps({
 })
 
 const idColumn = props.config?.idCol || props.idCol
-
 const emit = defineEmits<{
   (e: 'add'): void
   (e: 'edit', row: ItemRecord): void
@@ -98,6 +105,7 @@ const { register, tableObject, methods, elTableRef } = useTableX<ItemRecord>(
 
 const { getList, setSearchParams } = methods
 
+defineExpose({ getList })
 const { searchSchemaWithDefault } = useSearchDefault(
   props.searchSchema,
   tableObject,
@@ -140,6 +148,8 @@ const delData = async (row: ItemRecord | null, multiple: boolean) => {
   const { delList, getSelections } = methods
   const selections = await getSelections()
   delLoading.value = true
+  // console.log('delList', delList)
+  // console.log([(tableObject.currentRow || {})[idColumn] as string], 'delList')
   await delList(
     multiple
       ? selections.map((v) => v[idColumn])
@@ -182,6 +192,7 @@ const editEditable = ref(false)
 const openEditDialog = (type: string, id: string | number = '') => {
   closeEditDialog()
   editId.value = id
+  // 编辑弹窗
   if (type == 'add' || type == 'edit') {
     editEditable.value = true
   }
@@ -229,7 +240,7 @@ if (props.config?.use?.autoRefresh || props.autoRefresh) {
           <ElButton v-if="!hideBtnAdd" type="primary" @click="onAdd">
             {{ t('exampleDemo.add') }}
           </ElButton>
-          <slot name="action"></slot>
+          <slot name="actionSearch"></slot>
           <ElButton
             v-if="!hideBtnDelAll"
             :loading="delLoading"
@@ -265,6 +276,7 @@ if (props.config?.use?.autoRefresh || props.autoRefresh) {
       }"
       style="min-height: 10px"
       class="flex-grow"
+      :selection="selection"
       @register="register"
       @sort-change="onSortChange"
     >
@@ -306,6 +318,7 @@ if (props.config?.use?.autoRefresh || props.autoRefresh) {
     >
       <RestfulEdit
         :id="editId"
+        :modProperty="modProperty"
         :name-code="nameCode"
         :editable="editEditable"
         :config="config"

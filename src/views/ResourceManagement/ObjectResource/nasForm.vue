@@ -2,19 +2,23 @@
 import { Form } from '@/components/Form'
 import { useForm } from '@/hooks/web/useForm'
 import { PropType, reactive, watch } from 'vue'
-import { TableData } from '@/api/table/types'
+// import { modRow } from './config'
 import { useValidator } from '@/hooks/web/useValidator'
 
 const { required } = useValidator()
 
 const props = defineProps({
   currentRow: {
-    type: Object as PropType<Nullable<TableData>>,
+    type: Object,
     default: () => null
   },
   formSchema: {
     type: Array as PropType<FormSchema[]>,
     default: () => []
+  },
+  uid: {
+    type: String,
+    default: ''
   }
 })
 
@@ -43,6 +47,12 @@ watch(
   }
 )
 
+watch(
+  () => props.uid,
+  (val) => {
+    console.log(val, 'val')
+  }
+)
 defineExpose({
   elFormRef,
   getFormData: methods.getFormData

@@ -108,3 +108,23 @@ export function toAnyString() {
   })
   return str
 }
+
+export function formatDate(date) {
+  if (isNaN(date)) {
+    return '/'
+  } else {
+    date = new Date(Number(date))
+    const y = date.getFullYear()
+    let m = date.getMonth() + 1
+    let d = date.getDate()
+    let h = date.getHours()
+    let m1 = date.getMinutes()
+    let s = date.getSeconds()
+    m = m < 10 ? '0' + m : m
+    h = h < 10 ? '0' + h : h
+    m1 = m1 < 10 ? '0' + m1 : m1
+    d = d < 10 ? '0' + d : d
+    s = s < 10 ? '0' + s : s
+    return y + '/' + m + '/' + d + ' ' + h + ':' + m1 + ':' + s
+  }
+}
