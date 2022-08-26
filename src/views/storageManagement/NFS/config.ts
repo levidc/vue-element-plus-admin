@@ -91,6 +91,7 @@ export const NFSType = [
   { label: 'NFS', value: 'NFS' },
   { label: 'SAMBA', value: 'SAMBA' }
 ]
+
 export const config: UseTableConfigX<ItemRecord> = {
   idCol: 'gateWayId',
   getListApi,

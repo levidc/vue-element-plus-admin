@@ -1,5 +1,4 @@
 declare type cascadeDropdownSchema = {
-[x: string]: any
   disabled?: boolean
   divided?: boolean
   icon?: string

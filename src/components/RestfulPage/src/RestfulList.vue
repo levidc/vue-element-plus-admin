@@ -104,7 +104,6 @@ const { register, tableObject, methods, elTableRef } = useTableX<ItemRecord>(
 )
 
 const { getList, setSearchParams } = methods
-
 defineExpose({ getList })
 const { searchSchemaWithDefault } = useSearchDefault(
   props.searchSchema,
@@ -148,8 +147,6 @@ const delData = async (row: ItemRecord | null, multiple: boolean) => {
   const { delList, getSelections } = methods
   const selections = await getSelections()
   delLoading.value = true
-  // console.log('delList', delList)
-  // console.log([(tableObject.currentRow || {})[idColumn] as string], 'delList')
   await delList(
     multiple
       ? selections.map((v) => v[idColumn])
@@ -192,7 +189,6 @@ const editEditable = ref(false)
 const openEditDialog = (type: string, id: string | number = '') => {
   closeEditDialog()
   editId.value = id
-  // 编辑弹窗
   if (type == 'add' || type == 'edit') {
     editEditable.value = true
   }

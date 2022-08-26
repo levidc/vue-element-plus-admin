@@ -21,10 +21,6 @@ const props = defineProps({
     type: [String, Number],
     default: ''
   },
-  modProperty: {
-    type: String,
-    default: ''
-  },
   nameCode: propTypes.string.def('CRUD'),
   config: {
     type: Object as PropType<Recordable>,
@@ -61,7 +57,7 @@ const getTableDet = async () => {
   if (res) {
     currentRow.value = props.config?.response?.get
       ? get(res.data || {}, props.config?.response?.get as string)
-      : res.data?.[props.modProperty]
+      : res.data
   }
 }
 

@@ -59,7 +59,6 @@ service.interceptors.response.use(
       return response.data
     } else {
       ElMessage.error(response.data.description)
-      return Promise.reject('123')
     }
   },
   // error.response.data.message
