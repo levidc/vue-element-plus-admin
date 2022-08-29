@@ -10,6 +10,8 @@ const { result_code, base_url } = config
 
 export const PATH_URL = base_url[import.meta.env.VITE_API_BASEPATH]
 
+import { useI18n } from '@/hooks/web/useI18n'
+
 // 创建axios实例
 const service: AxiosInstance = axios.create({
   baseURL: PATH_URL, // api 的 base_url
@@ -57,13 +59,15 @@ service.interceptors.response.use(
     } else if (Number(response.data.code) === result_code || response.data.code === '0000') {
       return response.data
     } else {
-      ElMessage.error(response.data.description)
+      const { t } = useI18n()
+      ElMessage.error(t('error.' + [response.data.description]))
     }
   },
   // error.response.data.message
   (error: AxiosError) => {
     console.log('err' + error) // for debug
-    ElMessage.error(error?.response?.data.message || error.message)
+    const { t } = useI18n()
+    ElMessage.error(t(error?.response?.data.message || error.message))
     return Promise.reject(error)
   }
 )

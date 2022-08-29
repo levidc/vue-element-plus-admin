@@ -1,11 +1,11 @@
-import { h, reactive } from 'vue'
+import { h, reactive, ref } from 'vue'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useValidator } from '@/hooks/web/useValidator'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getTableListApi, delTableListApi, saveTableApi, getTableDetApi } from '@/api/table'
+import { delTableListApi, getTableDetApi } from '@/api/table'
 import { TableData } from '@/api/table/types'
 import { listNFSGateway, createNFSGateway } from '@/api/fs/NfsGateway'
-import { formItemProps } from 'element-plus'
+import { NFSType, NFStatus } from '@/locales/enum'
 import { formatDate } from '@/utils/index'
 const { t } = useI18n()
 const { required } = useValidator()
@@ -42,6 +42,7 @@ export const permission = [
     value: 'write'
   }
 ]
+
 export const renderAddForm = [
   {
     field: 'hostname',
@@ -87,10 +88,7 @@ export const renderAddForm = [
   }
 ]
 
-export const NFSType = [
-  { label: 'NFS', value: 'NFS' },
-  { label: 'SAMBA', value: 'SAMBA' }
-]
+export const IpSelections = ref([])
 
 export const config: UseTableConfigX<ItemRecord> = {
   idCol: 'gateWayId',
@@ -118,6 +116,9 @@ const crudSchemas = reactive<CrudSchema[]>([
       show: true
     },
     form: {
+      colProps: {
+        span: 24
+      },
       formItemProps: {
         rules: [required()]
       }
@@ -132,27 +133,22 @@ const crudSchemas = reactive<CrudSchema[]>([
     form: {
       show: false
     }
-    // form: {
-    //   component: 'Select',
-    //   componentProps: {
-    //     options: []
-    //   },
-    //   formItemProps: {
-    //     rules: [required()]
-    //   }
-    // }
   },
   {
     field: 'gatewayType',
     label: '网关类型',
     form: {
+      colProps: {
+        span: 12
+      },
       component: 'Select',
       componentProps: {
         options: NFSType
       },
       formItemProps: {
         rules: [required()]
-      }
+      },
+      value: 'NFS'
     }
   },
   {
@@ -160,22 +156,37 @@ const crudSchemas = reactive<CrudSchema[]>([
     label: '状态',
     form: {
       show: false
+    },
+    formatter: (_: Recordable, __: TableColumn, cellValue: string) => {
+      return NFStatus[cellValue]
     }
   },
   {
     field: 'mountPath',
     label: '挂载路径',
+    width: '200px',
     form: {
       show: false
     }
   },
   {
     field: 'virtualIp',
-    label: '虚拟Ip'
+    label: '服务器IP',
+    form: {
+      colProps: {
+        span: 12
+      },
+      component: 'Select',
+      componentProps: {
+        options: IpSelections,
+        placeholder: '请选择服务器IP'
+      }
+    }
   },
   {
     field: 'sharedBucket',
     label: '共享存储桶',
+    width: '200px',
     form: {
       show: false
     }
@@ -202,12 +213,14 @@ const crudSchemas = reactive<CrudSchema[]>([
   },
   {
     field: 'action',
-    width: '260px',
     label: t('tableDemo.action'),
-    form: {
-      show: false
+    width: '120px',
+    table: {
+      componentProps: {
+        align: 'center'
+      }
     },
-    detail: {
+    form: {
       show: false
     }
   }

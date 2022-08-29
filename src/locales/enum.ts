@@ -22,3 +22,15 @@ export const StorageType = [
   { label: 'REMOTE_DISK', value: 'REMOTE_DISK' },
   { label: 'LOCAL_DISK', value: 'LOCAL_DISK' }
 ]
+
+export const NFSType = [
+  { label: 'NFS', value: 'NFS' },
+  { label: 'SAMBA', value: 'SAMBA' }
+]
+
+export const NFStatus = {
+  UNAVAILABLE: '不可用',
+  AVAILABLE: '可用',
+  REMOVING: '删除中',
+  CREATING: '创建中'
+}

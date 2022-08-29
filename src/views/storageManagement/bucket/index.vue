@@ -7,20 +7,20 @@ import {
   ElButton,
   ElMessage,
   ElMessageBox,
-  ElTable,
-  ElTableColumn,
   ElSelect,
-  ElOption,
-  ElInput,
-  ElForm,
-  ElFormItem
+  ElOption
+  // ElTable,
+  // ElTableColumn,
+  // ElInput,
+  // ElForm,
+  // ElFormItem
 } from 'element-plus'
 import { CascadeDropdown } from '@/components/CascadeDropdown'
-import { Form } from '@/components/Form'
-import { ref, reactive, computed, h, watch, unref } from 'vue'
-import { useTable } from '@/hooks/web/useTable'
+// import { Form } from '@/components/Form'
+import { ref, reactive, computed, h, watch, unref, nextTick } from 'vue'
+// import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
-import { TableData } from '@/api/table/types'
+// import { TableData } from '@/api/table/types'
 import { listObjectStorageResource } from '@/api/fs/ObjectStorage'
 import { listBuckets } from '@/api/fs/Buckets'
 import { getNFSGateway, listNFSGateway } from '@/api/fs/NfsGateway'
@@ -110,37 +110,6 @@ const aclColumns = [
 ]
 
 const scehema = ref<cascadeDropdownSchema[]>([
-  // {
-  //   label: 'NFS共享',
-  //   command: () => {},
-  //   children: [
-  //     {
-  //       label: '添加NFS共享',
-  //       command:  (tagItem) => {
-  //         // selectGateWay.value = tagItem.row
-  //         // const res = await listNfsAcl({ gatewayId: tagItem.row.gatewayId })
-  //         // nextTick(() => {
-  //         //   gateWayClient.value = res.data.NfsAclList
-  //         //   // renderAddForm
-  //         //   addClientFlag.value = true
-  //         // })
-  //       }
-  //     },
-  //     {
-  //       divided: true,
-  //       label: '取消NFS共享',
-  //       command:  (tagItem) => {
-  //         // selectGateWay.value = tagItem.row
-  //         // const res = await listNfsAcl({ gatewayId: tagItem.row.gatewayId })
-  //         // nextTick(() => {
-  //         //   gateWayClient.value = res.data.NfsAclList
-  //         //   // renderAddForm
-  //         //   removeClientFlag.value = true
-  //         // })
-  //       }
-  //     }
-  //   ]
-  // },
   {
     label: '添加NFS共享',
     command: async () => {
@@ -253,24 +222,6 @@ watch(
     gatewayAcl.value = []
   }
 )
-
-// const options = [
-//   {
-//     value: 'nfsShare',
-//     label: 'NFS共享',
-//     children: [
-//       { value: 'set', label: '设置NFS共享' },
-//       { value: 'unset', label: '取消NFS共享' },
-//       { value: 'add', label: '添加客户端' },
-//       { value: 'remove', label: '移除客户端' }
-//     ]
-//   },
-//   {
-//     value: 'delete',
-//     label: '删除',
-//     disabled: true
-//   }
-// ]
 
 // const overviewColumn = [
 //   {
@@ -426,6 +377,8 @@ watch(
 //     }
 //   }
 // ]
+
+// 应用acl=> 按钮 添加NFS共享
 const formSubmit = () => {
   const data = {
     applyNfsAclIdList: TableAcl.value.selections.map((item) => item.id),
@@ -453,15 +406,19 @@ const formSubmit = () => {
 }
 
 // const TableR = ref()
-
+// nextTick(() => {
+//   console.log(TableR.value.elTableRef, 'TableR获取expose的实例')
+//   // doLayout()
+// })
 // const selections = ref([])
 
 // const disableSingle = ref(true)
 // watch(
 //   () => TableR.value?.selections,
 //   (val) => {
-//     selections.value = [].concat(val)
-//     disableSingle.value = val.length !== 1
+//     console.log(val, 'multiple')
+//     // selections.value = [].concat(val)
+//     // disableSingle.value = val.length !== 1
 //   }
 // )
 
@@ -638,30 +595,28 @@ const getPane = (val: string | number | void) => {
     :max-height="300"
     width="40%"
   >
-    <ContentWrap title="NFS共享" message="设置NFS网关共享后,存储桶不允许开启多版本功能;">
-      <ElSelect
-        class="mr-10"
-        style="width: 50%"
-        v-model="searchGateway"
-        placeholder="选择网关"
-        clearable
-      >
-        <ElOption
-          v-for="item in searchGatewayOpt"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </ElSelect>
-      <ElButton type="primary" @click="getGateway">
-        <Icon icon="ep:search" class="mr-5px" />
-        {{ t('common.query') }}
-      </ElButton>
-      <ElButton @click="resetGateway">
-        <Icon icon="ep:refresh-right" class="mr-5px" />
-        {{ t('common.reset') }}
-      </ElButton>
-    </ContentWrap>
+    <ElSelect
+      class="mr-10"
+      style="width: 50%"
+      v-model="searchGateway"
+      placeholder="选择网关"
+      clearable
+    >
+      <ElOption
+        v-for="item in searchGatewayOpt"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </ElSelect>
+    <ElButton type="primary" @click="getGateway">
+      <Icon icon="ep:search" class="mr-5px" />
+      {{ t('common.query') }}
+    </ElButton>
+    <ElButton @click="resetGateway">
+      <Icon icon="ep:refresh-right" class="mr-5px" />
+      {{ t('common.reset') }}
+    </ElButton>
     <Table
       ref="TableAcl"
       v-model:pageSize="tableObject.pageSize"

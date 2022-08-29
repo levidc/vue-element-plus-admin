@@ -4,7 +4,7 @@ import { RestfulList } from '@/components/RestfulPage'
 import { PropType } from 'vue'
 import { useI18n } from '@/hooks/web/useI18n'
 import { propTypes } from '@/utils/propTypes'
-import { allSchemas, rules, config, renderAddForm } from './config'
+import { allSchemas, rules, config, renderAddForm, IpSelections } from './config'
 import { nameCode as baseNameCode, titleInfo } from './routes'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
@@ -13,7 +13,8 @@ import { ref, unref, nextTick, watch } from 'vue'
 import { ElButton, ElTable, ElTableColumn, ElMessage, ElMessageBox } from 'element-plus'
 import { CascadeDropdown } from '@/components/CascadeDropdown'
 import { createNFSGateway, removeNFSGateway } from '@/api/fs/NfsGateway'
-import { listObjectStorageResource } from '@/api/fs/ObjectStorage'
+// import { listObjectStorageResource } from '@/api/fs/ObjectStorage'
+import { listInstances } from '@/api/fs/ListInstancesController'
 import { createNfsAcl, listNfsAcl, removeNfsAcl } from '@/api/fs/NfsAcl'
 const { t } = useI18n()
 
@@ -83,7 +84,7 @@ const save = () => {
       let data = await getFormData()
       console.log(data, 'data')
       // 获取表单model值
-      Object.assign(data, { gatewayId: 0, nfsAclModelList: [], virtualIp: '' })
+      Object.assign(data, { gatewayId: 0, nfsAclModelList: [] })
       createNFSGateway(data).then(() => {
         ElMessage.success(t('common.resSuccess'))
         createFlag.value = false
@@ -96,20 +97,29 @@ const save = () => {
 // 创建获取对象list 传递storageId
 const openCreate = () => {
   createFlag.value = true
-  let optionsStorage = []
-  const storageOption = async () => {
-    const res = await listObjectStorageResource()
-    console.log(res, 'res')
-    optionsStorage = res.data?.storageResources.map((item) => {
+  listInstances().then((res) => {
+    IpSelections.value = res.data.InstancesList.map((item) => {
       return {
-        label: item.storageName,
-        value: item.storageId
+        label: item.endPoint.hostName,
+        value: item.endPoint.hostName
       }
     })
-    allSchemas.formSchema[1].componentProps.options = [...optionsStorage]
-  }
-  storageOption()
-  console.log(allSchemas.formSchema[1].componentProps, 'allSchemas')
+    console.log(res, 'getIp')
+  })
+  // IpSelections.value
+  // const storageOption = async () => {
+  //   const res = await listObjectStorageResource()
+  //   console.log(res, 'res')
+  //   optionsStorage = res.data?.storageResources.map((item) => {
+  //     return {
+  //       label: item.storageName,
+  //       value: item.storageId
+  //     }
+  //   })
+  //   allSchemas.formSchema[1].componentProps.options = [...optionsStorage]
+  // }
+  // storageOption()
+  // console.log(allSchemas.formSchema[1].componentProps, 'allSchemas')
 }
 
 // 添加客户端
@@ -137,7 +147,7 @@ const formSubmit = () => {
 
 //移除客户端
 
-const handleDelete = (index: number, row: any) => {
+const handleDelete = (_: number, row: any) => {
   // selectGateWay.value.gatewayId
   ElMessageBox.confirm(t('common.delMessage'), t('common.delWarning'), {
     confirmButtonText: t('common.delOk'),
@@ -145,7 +155,7 @@ const handleDelete = (index: number, row: any) => {
     type: 'warning'
   }).then(() => {
     loading.value = true
-    removeNfsAcl({ aclId: row.id, gatewayId: selectGateWay.value.gatewayId }).then((res) => {
+    removeNfsAcl({ aclId: row.id, gatewayId: selectGateWay.value.gatewayId }).then(() => {
       // refresh
       ElMessage.success(t('common.resSuccess'))
       listNfsAcl({ gatewayId: selectGateWay.value.gatewayId })
@@ -159,37 +169,37 @@ const handleDelete = (index: number, row: any) => {
   })
 }
 const scehema = ref<cascadeDropdownSchema[]>([
-  {
-    label: 'NFS共享',
-    command: () => {},
-    children: [
-      {
-        label: '添加客户端',
-        command: async (tagItem) => {
-          selectGateWay.value = tagItem.row
-          const res = await listNfsAcl({ gatewayId: tagItem.row.gatewayId })
-          nextTick(() => {
-            gateWayClient.value = res.data.NfsAclList
-            // renderAddForm
-            addClientFlag.value = true
-          })
-        }
-      },
-      {
-        divided: true,
-        label: '移除客户端',
-        command: async (tagItem) => {
-          selectGateWay.value = tagItem.row
-          const res = await listNfsAcl({ gatewayId: tagItem.row.gatewayId })
-          nextTick(() => {
-            gateWayClient.value = res.data.NfsAclList
-            // renderAddForm
-            removeClientFlag.value = true
-          })
-        }
-      }
-    ]
-  },
+  // {
+  //   label: 'NFS共享',
+  //   command: () => {},
+  //   children: [
+  //     {
+  //       label: '添加客户端',
+  //       command: async (tagItem) => {
+  //         selectGateWay.value = tagItem.row
+  //         const res = await listNfsAcl({ gatewayId: tagItem.row.gatewayId })
+  //         nextTick(() => {
+  //           gateWayClient.value = res.data.NfsAclList
+  //           // renderAddForm
+  //           addClientFlag.value = true
+  //         })
+  //       }
+  //     },
+  //     {
+  //       divided: true,
+  //       label: '移除客户端',
+  //       command: async (tagItem) => {
+  //         selectGateWay.value = tagItem.row
+  //         const res = await listNfsAcl({ gatewayId: tagItem.row.gatewayId })
+  //         nextTick(() => {
+  //           gateWayClient.value = res.data.NfsAclList
+  //           // renderAddForm
+  //           removeClientFlag.value = true
+  //         })
+  //       }
+  //     }
+  //   ]
+  // },
   {
     label: '删除网关',
     command: (tagItem) => {
@@ -243,7 +253,7 @@ const scehema = ref<cascadeDropdownSchema[]>([
       </template>
     </RestfulList>
   </ContentWrap>
-  <Dialog v-model="createFlag" title="创建网关">
+  <Dialog v-model="createFlag" title="创建网关" width="40%">
     <ContentWrap>
       <Write ref="writeRef" :form-schema="allSchemas.formSchema" />
     </ContentWrap>
@@ -280,7 +290,7 @@ const scehema = ref<cascadeDropdownSchema[]>([
   <Dialog v-model="removeClientFlag" title="移除客户端" width="40%" :max-height="400">
     <ElTable :data="gateWayClient" max-height="600" v-loading="loading">
       <ElTableColumn label="hostname" prop="hostname" />
-      <ElTableColumn label="读写权限" prop="readonly">
+      <ElTableColumn label="访问控制" prop="readonly">
         <template #default="scope">
           {{ scope.row.readOnly ? '只读' : '读写' }}
         </template>

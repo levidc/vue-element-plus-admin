@@ -66,7 +66,7 @@ const getName = (row: {}) => {
 </script>
 
 <template>
-  <ContentWrap :title="t(titleInfo.title)" :message="titleInfo.message">
+  <ContentWrap :title="t(titleInfo.title)">
     <RestfulList
       ref="restful"
       id-col="storageId"
@@ -80,6 +80,7 @@ const getName = (row: {}) => {
       :rules="rules"
       :dialog="true"
       hideBtnDelAll
+      hideBtnEditItem
       hideBtnDetailItem
       hideBtnEditItemloadingOption
       :selection="false"

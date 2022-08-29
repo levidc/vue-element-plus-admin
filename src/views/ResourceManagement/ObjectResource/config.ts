@@ -79,7 +79,13 @@ const crudSchemas = reactive<CrudSchema[]>([
       return row.storageName.indexOf(value) > -1
     },
     virtualSortMethod: (a, b) => {
-      return a - b
+      if (a.localeCompare(b) > 0) {
+        return 1
+      } else if (a.localeCompare(b) < 0) {
+        return -1
+      } else {
+        return 0
+      }
     },
     form: {
       formItemProps: {
@@ -98,6 +104,10 @@ const crudSchemas = reactive<CrudSchema[]>([
       formItemProps: {
         rules: [required()]
       }
+    },
+    formatter: (_: Recordable, __: TableColumn, cellValue: string) => {
+      return StorageStatus.filter((item) => item.value === cellValue)?.[0].label
+      // return StorageStatus.filter(item => item.value === cellValue)?.[0].label
     }
   },
   {
@@ -194,8 +204,8 @@ const crudSchemas = reactive<CrudSchema[]>([
   },
   {
     field: 'action',
-    width: '260px',
     label: t('tableDemo.action'),
+    width: '200px',
     form: {
       show: false
     },

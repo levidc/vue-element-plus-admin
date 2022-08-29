@@ -57,7 +57,8 @@ export default {
     noPermission: `抱歉，您无权访问此页面。`,
     pageError: '抱歉，您访问的页面不存在。',
     networkError: '抱歉，服务器报告错误。',
-    returnToHome: '返回首页'
+    returnToHome: '返回首页',
+    timeout: '请求超时'
   },
   setting: {
     projectSetting: '项目配置',
@@ -470,5 +471,7 @@ export default {
     ObjectResource: '对象资源',
     ObjectResourceDes: '对象资源管理',
     NFS: 'NFS网关'
-  }
+  },
+  'resource name has already exists': '资源名称已重复',
+  'object storage resource is not exist': '该对象存储资源已不存在'
 }
