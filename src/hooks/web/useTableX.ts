@@ -4,6 +4,7 @@ import { isNullOrUnDef } from '@/utils/is'
 import { ElTable } from 'element-plus'
 import { get } from 'lodash-es'
 import { computed, nextTick, onMounted, Ref } from 'vue'
+import { response } from './useApiX'
 
 const sameObj = (obj1: Recordable, obj2: Recordable) => {
   const o1 = Object.keys(obj1).reduce((prev, k) => {
@@ -52,7 +53,7 @@ const listTableColumnWithCol = (
   }, initialValue)
 }
 
-export const useTableX = <T = any>(config?: UseTableConfigX<T>, tableColumns?: TableColumn[]) => {
+export const useTableX = <T = any>(config: UseTableConfigX<T>, tableColumns?: TableColumn[]) => {
   let tableListAll: T[] = []
   let willReload = true
   let listParamCache: Recordable = {}
@@ -76,13 +77,10 @@ export const useTableX = <T = any>(config?: UseTableConfigX<T>, tableColumns?: T
     list: Array<T>,
     total: number
   ): Parameters<R>[0] => {
-    const rst: Parameters<R>[0] = {
-      code: axiosConfig.result_code as any,
-      data: {
-        [cfg?.response.list || 'list']: list,
-        [cfg?.response?.total || 'total']: total
-      } as any
-    }
+    const rst: Parameters<R>[0] = response(axiosConfig.result_code as string, {
+      [cfg?.response.list || 'list']: list,
+      [cfg?.response?.total || 'total']: total
+    })
     return rst
   }
 
@@ -171,7 +169,7 @@ export const useTableX = <T = any>(config?: UseTableConfigX<T>, tableColumns?: T
           )
         }
 
-        // 刷新list willReload
+        // 开启virtualpage list刷新不了
         // if (!willReload) {
         //   setTimeout(() => {
         //     loadPageData()
@@ -267,4 +265,22 @@ export const useOrderDefault = <T extends { params: any }>(
   }
 
   return { getDefaultOrderedList, mergeDefaultOrder }
+}
+
+export const formatConfig = <T = any>(config: UseTableConfigX<T>): UseTableConfigX<T> => {
+  if ('___is_formatted___' in config && config.___is_formatted___) return config
+  const cfg = { ...config } as UseTableConfigX<T>
+  if (cfg.addApi) {
+    const saveApi = cfg.saveApi
+    cfg.saveApi = (data) => {
+      return new Promise((resolve, reject) => {
+        const fun =
+          cfg.addApi && (!cfg.idCol || !data[cfg.idCol] || data[cfg.idCol] == '0')
+            ? cfg.addApi
+            : saveApi
+        fun(data).then(resolve).catch(reject)
+      })
+    }
+  }
+  return { ...cfg, ___is_formatted___: true }
 }

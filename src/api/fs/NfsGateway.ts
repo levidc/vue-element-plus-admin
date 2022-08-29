@@ -6,7 +6,7 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
-import { NfsGatewayModel, ResponseModelObject } from "./data-contracts"
+import { NfsGatewayModel } from "./data-contracts"
 import { doRst, request, RequestParams } from "./http-client"
 
 /**
@@ -20,7 +20,7 @@ import { doRst, request, RequestParams } from "./http-client"
 export const createNFSGateway = (
   nfsGatewayModel: NfsGatewayModel,
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/createNFSGateway`,
@@ -38,10 +38,7 @@ export const createNFSGateway = (
  * @summary 查询nfs网关
  * @request GET:/fs/getNFSGateway
  */
-export const getNFSGateway = (
-  query: { gatewayId: number },
-  params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+export const getNFSGateway = (query: { gatewayId: number }, params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/getNFSGateway`,
@@ -59,7 +56,7 @@ export const getNFSGateway = (
  * @summary 获取所有nfs网关
  * @request GET:/fs/listNFSGateway
  */
-export const listNFSGateway = (params: RequestParams = {}): Promise<ResponseModelObject> => {
+export const listNFSGateway = (params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/listNFSGateway`,
@@ -79,7 +76,7 @@ export const listNFSGateway = (params: RequestParams = {}): Promise<ResponseMode
 export const removeNFSGateway = (
   query: { gatewayId: number },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .delete({
       url: `/fs/removeNFSGateway`,

@@ -51,7 +51,6 @@ service.interceptors.request.use(
 // response 拦截器
 service.interceptors.response.use(
   (response: AxiosResponse<any>) => {
-    console.log('123', response)
     if (response.config.responseType === 'blob') {
       // 如果是文件流，直接过
       return response

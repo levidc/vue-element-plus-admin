@@ -91,11 +91,11 @@ const tableColumns = [
 const aclColumns = [
   {
     field: 'hostname',
-    label: 'hostname'
+    label: '客户端IP'
   },
   {
     field: 'readOnly',
-    label: '读写控制',
+    label: '访问权限',
     formatter: (_, __, value) => {
       return h('span', value ? '只读' : '读写')
     }
@@ -157,9 +157,16 @@ const scehema = ref<cascadeDropdownSchema[]>([
   },
   {
     label: '取消NFS共享',
-    command: (tagItem) => {
+    command: async () => {
       applyFlag.value = true
       shareType.value = 'cancel'
+      const res = await listNFSGateway()
+      searchGatewayOpt.value = res.data.NFSGatewayList.map((item) => {
+        return {
+          label: item.gatewayName,
+          value: item.gatewayId
+        }
+      })
     }
   }
   // {
@@ -180,16 +187,22 @@ const scehema = ref<cascadeDropdownSchema[]>([
   // }
 ])
 
-const initList = async () => {
-  const res = await listObjectStorageResource()
-  // 初始化选择、重置按钮重新刷新
-  searchOption.value = res.data.storageResources.map((item) => {
-    return {
-      label: item.storageName,
-      value: item.storageId
-    }
-  })
+// listBuckets
+const initList = () => {
   tableObject.loading = false
+  listObjectStorageResource()
+    .then((res) => {
+      searchOption.value = res.data.storageResources.map((item) => {
+        return {
+          label: item.storageName,
+          value: item.storageId
+        }
+      })
+    })
+    .finally(() => {
+      tableObject.loading = false
+    })
+  // 初始化选择、重置按钮重新刷新
 }
 
 initList()
@@ -235,7 +248,7 @@ const getGateway = () => {
 
 watch(
   () => applyFlag.value,
-  (val) => {
+  () => {
     searchGateway.value = ''
     gatewayAcl.value = []
   }

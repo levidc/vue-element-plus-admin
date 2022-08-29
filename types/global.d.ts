@@ -37,5 +37,7 @@ declare interface AxiosConfig {
 
 declare interface IResponse<T = any> {
   code: string
+  // SRC: IResponse增加message
+  message?: string
   data: T extends any ? T : T & any
 }

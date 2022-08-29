@@ -6,19 +6,66 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
-export interface FormatEntity {
-  accessKey?: string
+export interface CommonPrefixes {
+  Prefix?: string
+}
 
-  /** @format int64 */
-  blockSize?: number
-  bucket?: string
-  cacheStore?: string
-  metaData?: string
-  name?: string
-  requestId?: string
-  secretKey?: string
-  storage?: string
-  subStorage?: string
+export interface CompleteMultipartUploadRequest {
+  Part?: Part[]
+}
+
+export interface CompleteMultipartUploadResult {
+  Bucket?: string
+  ETag?: string
+  Key?: string
+  Location?: string
+}
+
+export interface DeleteError {
+  Code?: string
+  Key?: string
+  Message?: string
+  VersionId?: string
+}
+
+export interface DeleteObjectResponse {
+  Deleted?: Deleted[]
+  Error?: DeleteError[]
+}
+
+export interface Deleted {
+  DeleteMarker?: boolean
+  DeleteMarkerVersionId?: string
+  Key?: string
+  VersionId?: string
+}
+
+export interface InitiateMultipartUploadResult {
+  Bucket?: string
+  Key?: string
+  UploadId?: string
+}
+
+export interface ListObjectResult {
+  CommonPrefixes?: CommonPrefixes[]
+  Contents?: object[]
+  ContinuationToken?: string
+  Delimiter?: string
+  EncodingType?: string
+  IsTruncated?: boolean
+
+  /** @format int32 */
+  KeyCount?: number
+  Marker?: string
+
+  /** @format int32 */
+  MaxKeys?: number
+  Name?: string
+  NextContinuationToken?: string
+  NextMarker?: string
+  Prefix?: string
+  StartAfter?: string
+  truncated?: boolean
 }
 
 export interface ModelAndView {
@@ -74,7 +121,7 @@ export interface ModelAndView {
     | "419 INSUFFICIENT_SPACE_ON_RESOURCE"
     | "420 METHOD_FAILURE"
     | "421 DESTINATION_LOCKED"
-    | "422 UNPROCESSABLE_ENTInumberTY"
+    | "422 UNPROCESSABLE_ENTITY"
     | "423 LOCKED"
     | "424 FAILED_DEPENDENCY"
     | "425 TOO_EARLY"
@@ -101,8 +148,11 @@ export interface ModelAndView {
 
 export interface MountEntity {
   mountPath?: string
-  name?: string
   requestId?: string
+
+  /** @format int64 */
+  storageId?: number
+  storePath?: string
 }
 
 export interface NFSACLRelationShipModel {
@@ -170,7 +220,7 @@ export interface NasRemoteDiskStorageModel {
   storageStatus?: "STORAGE_NULL" | "STORAGE_BROKEN" | "STORAGE_ONLINE" | "STORAGE_OFFLINE" | "CONFIG_MISMATCH"
 
   /** 存储类型,如：NAS,DBS,REMOTE_DISK,LOCAL_DISK,DOS */
-  storageType?: "S3" | "DOS" | "MIO" | "NAS" | "DBS" | "REMOTE_DISK" | "LOCAL_DISK"
+  storageType?: "NULL" | "S3" | "DOS" | "MIO" | "NAS" | "DBS" | "REMOTE_DISK" | "LOCAL_DISK"
 
   /**
    * 总空间
@@ -255,6 +305,24 @@ export interface NfsGatewayModel {
   virtualIp?: string
 }
 
+export interface Object {
+  ETag?: string
+  Key?: string
+  LastModified?: string
+  Owner?: Owner
+
+  /** @format int32 */
+  Size?: number
+  StorageClass?:
+    | "STANDARD"
+    | "REDUCED_REDUNDANCY"
+    | "GLACIER"
+    | "STANDARD_IA"
+    | "ONEZONE_IA"
+    | "INTELLIGENT_TIERING"
+    | "DEEP_ARCHIVE"
+}
+
 export interface ObjectStorageResourceModel {
   /**
    * 本地总空间
@@ -281,7 +349,7 @@ export interface ObjectStorageResourceModel {
   storageStatus?: "STORAGE_NULL" | "STORAGE_BROKEN" | "STORAGE_ONLINE" | "STORAGE_OFFLINE" | "CONFIG_MISMATCH"
 
   /** 存储类型,如：NAS,DBS,REMOTE_DISK,LOCAL_DISK,DOS */
-  storageType?: "S3" | "DOS" | "MIO" | "NAS" | "DBS" | "REMOTE_DISK" | "LOCAL_DISK"
+  storageType?: "NULL" | "S3" | "DOS" | "MIO" | "NAS" | "DBS" | "REMOTE_DISK" | "LOCAL_DISK"
 
   /**
    * 总空间
@@ -303,6 +371,22 @@ export interface ObjectStorageResourceModel {
 
   /** 访问存储资源的用户名 */
   userName?: string
+}
+
+export interface Owner {
+  DisplayName?: string
+  ID?: string
+}
+
+export interface Part {
+  ETag?: string
+  LastModified?: string
+
+  /** @format int32 */
+  PartNumber?: number
+
+  /** @format int32 */
+  Size?: number
 }
 
 export interface SambaAclModel {

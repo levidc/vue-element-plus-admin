@@ -15,10 +15,6 @@ const props = defineProps({
   formSchema: {
     type: Array as PropType<FormSchema[]>,
     default: () => []
-  },
-  uid: {
-    type: String,
-    default: ''
   }
 })
 
@@ -47,12 +43,6 @@ watch(
   }
 )
 
-watch(
-  () => props.uid,
-  (val) => {
-    console.log(val, 'val')
-  }
-)
 defineExpose({
   elFormRef,
   getFormData: methods.getFormData

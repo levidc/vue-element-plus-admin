@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDesign } from '@/hooks/web/useDesign'
-import { ref, unref, PropType, onMounted, TeleportProps } from 'vue'
+import { ref, unref, PropType, onMounted, TeleportProps, computed } from 'vue'
 import { propTypes } from '@/utils/propTypes'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useEmitt } from '@/hooks/web/useEmitt'
@@ -8,6 +8,7 @@ import { ElButton } from 'element-plus'
 import RestfulWrite from './components/RestfulWrite.vue'
 import { Descriptions } from '@/components/Descriptions'
 import { get } from 'lodash-es'
+import { formatConfig } from '@/hooks/web/useTableX'
 
 const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('RestfulEdit')
@@ -23,7 +24,7 @@ const props = defineProps({
   },
   nameCode: propTypes.string.def('CRUD'),
   config: {
-    type: Object as PropType<Recordable>,
+    type: Object as PropType<UseTableConfigX<ItemRecord>>,
     default: () => ({})
   },
   types: {
@@ -46,6 +47,8 @@ const props = defineProps({
   actionTo: undefined as unknown as PropType<TeleportProps['to']>
 })
 
+const cfg = computed(() => formatConfig(props.config))
+
 const emit = defineEmits<{
   (e: 'save', row: ItemRecord): void
 }>()
@@ -53,10 +56,10 @@ const emit = defineEmits<{
 const currentRow = ref<Nullable<ItemRecord>>(null)
 
 const getTableDet = async () => {
-  const res = await props.config.getApi(props.id)
+  const res = await cfg.value.getApi(props.id + '')
   if (res) {
-    currentRow.value = props.config?.response?.get
-      ? get(res.data || {}, props.config?.response?.get as string)
+    currentRow.value = cfg.value?.response?.get
+      ? get(res.data || {}, cfg.value?.response?.get as string)
       : res.data
   }
 }
@@ -73,7 +76,7 @@ const onSave = async () => {
   if (validate) {
     loading.value = true
     const data = (await write?.getFormData()) as ItemRecord
-    const res = await props.config
+    const res = await cfg.value
       .saveApi(data)
       .catch(() => {})
       .finally(() => {
@@ -98,9 +101,14 @@ onMounted(() => (mounted.value = true))
       :current-row="currentRow"
       :form-schema="formSchema"
       :rules="rules"
-      :config="config.formProps"
+      :config="cfg.formProps"
     />
-    <Descriptions v-else :data="currentRow || {}" :schema="detailSchema" v-bind="config.descProps">
+    <Descriptions
+      v-else
+      :data="currentRow || {}"
+      :schema="detailSchema"
+      v-bind="(cfg.descProps as Recordable)"
+    >
       <template v-for="(item, key, index) in $slots" :key="index" #[key]="data">
         <slot :name="key" v-bind="data" :src="item"></slot>
       </template>

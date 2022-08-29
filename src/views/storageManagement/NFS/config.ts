@@ -45,7 +45,7 @@ export const permission = [
 export const renderAddForm = [
   {
     field: 'hostname',
-    label: 'hostname',
+    label: '客户端IP',
     component: 'Input',
     formItemProps: {
       rules: [required()]
@@ -53,7 +53,7 @@ export const renderAddForm = [
   },
   {
     field: 'readOnly',
-    label: '读写控制',
+    label: '访问权限',
     component: 'RadioButton',
     componentProps: {
       options: [
@@ -130,14 +130,17 @@ const crudSchemas = reactive<CrudSchema[]>([
       show: false
     },
     form: {
-      component: 'Select',
-      componentProps: {
-        options: []
-      },
-      formItemProps: {
-        rules: [required()]
-      }
+      show: false
     }
+    // form: {
+    //   component: 'Select',
+    //   componentProps: {
+    //     options: []
+    //   },
+    //   formItemProps: {
+    //     rules: [required()]
+    //   }
+    // }
   },
   {
     field: 'gatewayType',
@@ -168,10 +171,7 @@ const crudSchemas = reactive<CrudSchema[]>([
   },
   {
     field: 'virtualIp',
-    label: '虚拟Ip',
-    form: {
-      show: false
-    }
+    label: '虚拟Ip'
   },
   {
     field: 'sharedBucket',

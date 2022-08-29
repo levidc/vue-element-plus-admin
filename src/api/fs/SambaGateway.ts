@@ -6,7 +6,7 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
-import { ResponseModelObject, SambaGatewayModel } from "./data-contracts"
+import { SambaGatewayModel } from "./data-contracts"
 import { doRst, request, RequestParams } from "./http-client"
 
 /**
@@ -20,7 +20,7 @@ import { doRst, request, RequestParams } from "./http-client"
 export const createSambaGateway = (
   sambaGatewayModel: SambaGatewayModel,
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/createSambaGateway`,
@@ -41,7 +41,7 @@ export const createSambaGateway = (
 export const getSambaGateway = (
   query: { gatewayId: number },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/getSambaGateway`,
@@ -59,7 +59,7 @@ export const getSambaGateway = (
  * @summary listSambaGateway
  * @request GET:/fs/listSambaGateway
  */
-export const listSambaGateway = (params: RequestParams = {}): Promise<ResponseModelObject> => {
+export const listSambaGateway = (params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/listSambaGateway`,
@@ -79,7 +79,7 @@ export const listSambaGateway = (params: RequestParams = {}): Promise<ResponseMo
 export const removeSambaGateway = (
   query: { gatewayId: number },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/removeSambaGateway`,

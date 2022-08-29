@@ -6,7 +6,7 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
-import { MountEntity, Versions } from "./data-contracts"
+import { MountEntity, ResponseModelVersions } from "./data-contracts"
 import { doRst, request, RequestParams } from "./http-client"
 
 /**
@@ -17,7 +17,7 @@ import { doRst, request, RequestParams } from "./http-client"
  * @summary mountHandler
  * @request POST:/fs/mount
  */
-export const mount = (mountEntity: MountEntity, params: RequestParams = {}): Promise<IResponse<Versions>> => {
+export const mount = (mountEntity: MountEntity, params: RequestParams = {}): Promise<ResponseModelVersions> => {
   return request
     .post({
       url: `/fs/mount`,

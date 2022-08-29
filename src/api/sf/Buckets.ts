@@ -6,6 +6,7 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
+import { ResponseModelObject } from "./data-contracts"
 import { doRst, request, RequestParams } from "./http-client"
 
 /**
@@ -16,7 +17,7 @@ import { doRst, request, RequestParams } from "./http-client"
  * @summary 获取所有的存储桶
  * @request GET:/fs/listBuckets
  */
-export const listBuckets = (query: { storageId: number }, params: RequestParams = {}): Promise<IResponse<object>> => {
+export const listBuckets = (query: { storageId: number }, params: RequestParams = {}): Promise<ResponseModelObject> => {
   return request
     .get({
       url: `/fs/listBuckets`,

@@ -22,6 +22,7 @@ declare global {
     idCol: string
     getApi: (id: string) => Promise<IResponse<T>>
     saveApi: (data: Partial<T>) => Promise<IResponse<T>>
+    addApi?: (data: Partial<T>) => Promise<IResponse<T>>
     response: {
       get?: string
     }
@@ -33,5 +34,5 @@ declare global {
     }
     formProps?: FormProps
     descProps?: DescriptionsProps
-  }
+  } & Recordable
 }

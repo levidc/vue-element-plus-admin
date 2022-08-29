@@ -16,8 +16,10 @@ const { required } = useValidator()
 //            b. 合适的位置加入并展开（参数为父级路由） ...getRestfulRoutes('/my-demos')
 
 export type ItemRecord = TableData
+export const idCol = 'id'
 export const getListApi = getTableListApi
 export const delListApi = delTableListApi
+export const addApi = saveTableApi
 export const saveApi = saveTableApi
 export const getApi = getTableDetApi
 
@@ -30,11 +32,12 @@ export const getApi = getTableDetApi
 // d）可通过virtualFilterMethod来替换默认的排序方式：virtualFilterMethod:(value,row,column)=>{return true/false}
 //    有多个检索字段时，virtualFilterMethod可能会调用多次，只要有一次返回false，此数据就不会出现在最终列表中
 export const config: UseTableConfigX<ItemRecord> = {
-  idCol: 'id',
+  idCol,
   getListApi,
   delListApi,
   getApi,
   saveApi,
+  addApi,
   response: {
     list: 'list',
     total: 'total'
@@ -133,15 +136,6 @@ const crudSchemas = reactive<CrudSchema[]>([
     form: {
       component: 'InputNumber',
       value: 0
-    },
-    sortable: 'custom',
-    virtualFilterMethod: (value, row, column) => {
-      console.log(value, 'value', row)
-      return value
-    },
-    virtualSortMethod: (a, b) => {
-      console.log(a, b)
-      return a - b
     }
   },
   {

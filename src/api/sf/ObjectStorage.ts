@@ -6,7 +6,7 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
-import { ObjectStorageResourceModel } from "./data-contracts"
+import { ObjectStorageResourceModel, ResponseModelObject } from "./data-contracts"
 import { doRst, request, RequestParams } from "./http-client"
 
 /**
@@ -20,7 +20,7 @@ import { doRst, request, RequestParams } from "./http-client"
 export const addObjectStorageResource = (
   resourceModel: ObjectStorageResourceModel,
   params: RequestParams = {}
-): Promise<IResponse<object>> => {
+): Promise<ResponseModelObject> => {
   return request
     .post({
       url: `/fs/addObjectStorageResource`,
@@ -41,7 +41,7 @@ export const addObjectStorageResource = (
 export const getObjectStorageResource = (
   query: { storageId: number },
   params: RequestParams = {}
-): Promise<IResponse<object>> => {
+): Promise<ResponseModelObject> => {
   return request
     .get({
       url: `/fs/getObjectStorageResource`,
@@ -59,7 +59,7 @@ export const getObjectStorageResource = (
  * @summary 获取所有对象存储资源
  * @request GET:/fs/listObjectStorageResource
  */
-export const listObjectStorageResource = (params: RequestParams = {}): Promise<IResponse<object>> => {
+export const listObjectStorageResource = (params: RequestParams = {}): Promise<ResponseModelObject> => {
   return request
     .get({
       url: `/fs/listObjectStorageResource`,
@@ -79,7 +79,7 @@ export const listObjectStorageResource = (params: RequestParams = {}): Promise<I
 export const removeObjectStorageResource = (
   query: { storageId: number },
   params: RequestParams = {}
-): Promise<IResponse<object>> => {
+): Promise<ResponseModelObject> => {
   return request
     .delete({
       url: `/fs/removeObjectStorageResource`,
@@ -100,7 +100,7 @@ export const removeObjectStorageResource = (
 export const updateObjectStorageResource = (
   resourceModel: ObjectStorageResourceModel,
   params: RequestParams = {}
-): Promise<IResponse<object>> => {
+): Promise<ResponseModelObject> => {
   return request
     .post({
       url: `/fs/updateObjectStorageResource`,

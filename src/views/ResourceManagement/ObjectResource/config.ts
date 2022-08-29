@@ -1,8 +1,7 @@
-import { h, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useValidator } from '@/hooks/web/useValidator'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-// import { getTableListApi, delTableListApi, saveTableApi, getTableDetApi } from '@/api/table'
 import { TableData } from '@/api/table/types'
 import {
   listObjectStorageResource,
@@ -10,6 +9,8 @@ import {
   removeObjectStorageResource,
   getObjectStorageResource
 } from '@/api/fs/ObjectStorage'
+import { PerformanceType, StorageStatus, StorageType } from '@/locales/enum'
+import { ApiPacker } from '@/hooks/web/useApiX'
 const { t } = useI18n()
 const { required } = useValidator()
 // export type modRow = {
@@ -21,7 +22,6 @@ const { required } = useValidator()
 //   display_time: string
 //   pageviews: number
 // }
-
 // -------- 配置区域开始 -----------------------------------
 // TODO 1）需在src/locales语言文件的“rest”字段下添加以“ObjectResource”和“ObjectResourceDes”为key的语言项
 // TODO 2）把routes.ts中的路由引用（不要复制）到路由配置文件中：
@@ -29,9 +29,17 @@ const { required } = useValidator()
 //            b. 合适的位置加入并展开（参数为父级路由） ...getObjectResourceRoutes('/my-demos')
 
 // TODO 3）配置数据记录类型和增删改查接口
+
+// 传递id、删除、get、id、不支持多参数传递
+export const idCol = 'storageId'
 export type ItemRecord = TableData // 若没有类型，默认可设置为：Recordable
 export const getListApi = listObjectStorageResource
-export const delListApi = removeObjectStorageResource
+export const delListApi = ApiPacker.from(removeObjectStorageResource)
+  .paramArrFirst()
+  .paramArrToObj(idCol)
+  .build()
+
+// removeObjectStorageResource
 export const saveApi = addObjectStorageResource
 export const getApi = getObjectStorageResource
 
@@ -44,32 +52,8 @@ export const getApi = getObjectStorageResource
 // d）可通过virtualFilterMethod来替换默认的排序方式：virtualFilterMethod:(value,row,column)=>{return true/false}
 //    有多个检索字段时，virtualFilterMethod可能会调用多次，只要有一次返回false，此数据就不会出现在最终列表中
 
-export const PerformanceType = [
-  { label: 'PERFOR_NULL', value: '0' },
-  { label: 'HIGH', value: '1' },
-  { label: 'MIDDLE', value: '2' },
-  { label: 'LOW', value: '3' }
-]
-
-export const StorageStatus = [
-  { label: 'STORAGE_NULL', value: 'STORAGE_NULL' },
-  { label: 'STORAGE_BROKEN', value: 'STORAGE_BROKEN' },
-  { label: 'STORAGE_ONLINE', value: 'STORAGE_ONLINE' },
-  { label: 'STORAGE_OFFLINE', value: 'STORAGE_OFFLINE' },
-  { label: 'CONFIG_MISMATCH', value: 'CONFIG_MISMATCH' }
-]
-
-export const StorageType = [
-  { label: 'S3', value: 'S3' },
-  { label: 'DOS', value: 'DOS' },
-  { label: 'MIO', value: 'MIO' },
-  { label: 'NAS', value: 'NAS' },
-  { label: 'DBS', value: 'DBS' },
-  { label: 'REMOTE_DISK', value: 'REMOTE_DISK' },
-  { label: 'LOCAL_DISK', value: 'LOCAL_DISK' }
-]
-
 export const config: UseTableConfigX<ItemRecord> = {
+  idCol,
   getListApi,
   delListApi,
   getApi,
@@ -109,42 +93,12 @@ const crudSchemas = reactive<CrudSchema[]>([
     form: {
       component: 'Select',
       componentProps: {
-        options: [
-          { label: 'STORAGE_NULL', value: 'STORAGE_NULL' },
-          { label: 'STORAGE_BROKEN', value: 'STORAGE_BROKEN' },
-          { label: 'STORAGE_ONLINE', value: 'STORAGE_ONLINE' },
-          { label: 'STORAGE_OFFLINE', value: 'STORAGE_OFFLINE' },
-          { label: 'CONFIG_MISMATCH', value: 'CONFIG_MISMATCH' }
-        ]
+        options: StorageStatus
       },
       formItemProps: {
         rules: [required()]
       }
     }
-    // formatter: (_: Recordable, __: TableColumn, cellValue: number) => {
-    //   return h(
-    //     ElTag,
-    //     {
-    //       type: cellValue === 1 ? 'success' : cellValue === 2 ? 'warning' : 'danger'
-    //     },
-    //     () => (cellValue === 1 ? '在线' : '离线')
-    //   )
-    // },
-    // form: {
-    //   component: 'Select',
-    //   componentProps: {
-    //     options: [
-    //       {
-    //         label: '在线',
-    //         value: '1'
-    //       },
-    //       {
-    //         label: '离线',
-    //         value: '2'
-    //       }
-    //     ]
-    //   }
-    // }
   },
   {
     field: 'storageType',
@@ -152,15 +106,7 @@ const crudSchemas = reactive<CrudSchema[]>([
     form: {
       component: 'Select',
       componentProps: {
-        options: [
-          { label: 'S3', value: 'S3' },
-          { label: 'DOS', value: 'DOS' },
-          { label: 'MIO', value: 'MIO' },
-          { label: 'NAS', value: 'NAS' },
-          { label: 'DBS', value: 'DBS' },
-          { label: 'REMOTE_DISK', value: 'REMOTE_DISK' },
-          { label: 'LOCAL_DISK', value: 'LOCAL_DISK' }
-        ]
+        options: StorageType
       },
       formItemProps: {
         rules: [required()]
@@ -224,9 +170,6 @@ const crudSchemas = reactive<CrudSchema[]>([
   {
     field: 'userName',
     label: '用户名',
-    // table: {
-    //   show: false
-    // }
     form: {
       formItemProps: {
         rules: [required()]

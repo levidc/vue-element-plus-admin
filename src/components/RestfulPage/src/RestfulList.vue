@@ -7,9 +7,9 @@ import { ElButton } from 'element-plus'
 // import { get } from 'lodash-es'
 import { Table } from '@/components/Table'
 // import { useTable } from '@/hooks/web/useTable'
-import { useTableX, useSearchDefault, useOrderDefault } from '@/hooks/web/useTableX'
+import { useTableX, formatConfig, useSearchDefault, useOrderDefault } from '@/hooks/web/useTableX'
 import { propTypes } from '@/utils/propTypes'
-import { ref, PropType, TeleportProps, onMounted } from 'vue'
+import { ref, PropType, TeleportProps, onMounted, computed } from 'vue'
 import { useEmitt } from '@/hooks/web/useEmitt'
 import RestfulEdit from './RestfulEdit.vue'
 import { useTimer } from '@/hooks/web/useTimer'
@@ -23,7 +23,7 @@ type ItemRecord = Recordable
 const props = defineProps({
   nameCode: propTypes.string.def('CRUD'),
   config: {
-    type: Object as PropType<Parameters<typeof useTableX<ItemRecord>>[0]>,
+    type: Object as PropType<UseTableConfigX<ItemRecord>>,
     default: () => ({})
   },
   modProperty: {
@@ -84,7 +84,10 @@ const props = defineProps({
   hideBtnDelItem: propTypes.bool.def(false)
 })
 
-const idColumn = props.config?.idCol || props.idCol
+const cfg = computed(() => formatConfig(props.config))
+
+const idColumn = cfg.value?.idCol || props.idCol
+
 const emit = defineEmits<{
   (e: 'add'): void
   (e: 'edit', row: ItemRecord): void
@@ -94,12 +97,12 @@ const emit = defineEmits<{
 
 const { register, tableObject, methods, elTableRef } = useTableX<ItemRecord>(
   {
-    ...props.config,
+    ...cfg.value,
     use: {
-      virtualPage: props.virtualPage || props.config?.use?.virtualPage,
-      virtualPageDelay: props.virtualPageDelay || props.config?.use?.virtualPageDelay
+      virtualPage: props.virtualPage || cfg.value?.use?.virtualPage,
+      virtualPageDelay: props.virtualPageDelay || cfg.value?.use?.virtualPageDelay
     }
-  } as typeof props.config,
+  } as typeof cfg.value,
   props.tableColumns
 )
 
@@ -208,13 +211,13 @@ const saveAction = (row: ItemRecord) => {
 
 const removeEditTag = (tag: string | number) => tag.toString().replace(/^edit-/, '')
 
-if (props.config?.use?.autoRefresh || props.autoRefresh) {
+if (cfg.value?.use?.autoRefresh || props.autoRefresh) {
   const { callTimes } = useTimer(() => {
     methods.setNeedReload()
     getList()
     tableObject.loading = false
     console.info('Refresh', callTimes.value)
-  }, props.config?.use?.autoRefreshDelay || props.autoRefreshDelay)
+  }, cfg.value?.use?.autoRefreshDelay || props.autoRefreshDelay)
 }
 </script>
 
@@ -314,10 +317,9 @@ if (props.config?.use?.autoRefresh || props.autoRefresh) {
     >
       <RestfulEdit
         :id="editId"
-        :modProperty="modProperty"
         :name-code="nameCode"
         :editable="editEditable"
-        :config="config"
+        :config="cfg"
         :form-schema="formSchema"
         :detail-schema="detailSchema"
         :rules="rules"

@@ -6,7 +6,7 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
-import { ResponseModelObject, SambaAclModel } from "./data-contracts"
+import { SambaAclModel } from "./data-contracts"
 import { doRst, request, RequestParams } from "./http-client"
 
 /**
@@ -20,7 +20,7 @@ import { doRst, request, RequestParams } from "./http-client"
 export const applySambaACLRelationship = (
   query: { applySambaAclIdList: number[]; gatewayId: number },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/applySambaACLRelationship`,
@@ -41,7 +41,7 @@ export const applySambaACLRelationship = (
 export const cancelSambaACLRelationship = (
   query: { delSambaAclIdList: number[]; gatewayId: number; gatewayName: string },
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/cancelSambaACLRelationship`,
@@ -62,7 +62,7 @@ export const cancelSambaACLRelationship = (
 export const createSambaACL = (
   sambaAclModel: SambaAclModel,
   params: RequestParams = {}
-): Promise<ResponseModelObject> => {
+): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/createSambaACL`,
@@ -80,7 +80,7 @@ export const createSambaACL = (
  * @summary getSambaAcl
  * @request GET:/fs/getSambaACL
  */
-export const getSambaACL = (query: { aclId: number }, params: RequestParams = {}): Promise<ResponseModelObject> => {
+export const getSambaACL = (query: { aclId: number }, params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/getSambaACL`,
@@ -98,7 +98,7 @@ export const getSambaACL = (query: { aclId: number }, params: RequestParams = {}
  * @summary listSambaAcl
  * @request GET:/fs/listSambaACL
  */
-export const listSambaACL = (params: RequestParams = {}): Promise<ResponseModelObject> => {
+export const listSambaACL = (params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/listSambaACL`,
@@ -115,7 +115,7 @@ export const listSambaACL = (params: RequestParams = {}): Promise<ResponseModelO
  * @summary removeSambaAcl
  * @request DELETE:/fs/removeSambaACL
  */
-export const removeSambaACL = (query: { aclId: number }, params: RequestParams = {}): Promise<ResponseModelObject> => {
+export const removeSambaACL = (query: { aclId: number }, params: RequestParams = {}): Promise<IResponse<object>> => {
   return request
     .delete({
       url: `/fs/removeSambaACL`,

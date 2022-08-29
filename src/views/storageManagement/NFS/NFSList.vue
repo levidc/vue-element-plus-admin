@@ -59,7 +59,7 @@ watch(
           // hostname 唯一校验
           const res = gateWayClient.value.filter((item) => item.hostname === data)
           if (res && res.length) {
-            return cb('hostname重复请修改')
+            return cb('客户端IP重复请修改')
           } else {
             cb()
           }
@@ -84,7 +84,7 @@ const save = () => {
       console.log(data, 'data')
       // 获取表单model值
       Object.assign(data, { gatewayId: 0, nfsAclModelList: [], virtualIp: '' })
-      createNFSGateway(data).then((res) => {
+      createNFSGateway(data).then(() => {
         ElMessage.success(t('common.resSuccess'))
         createFlag.value = false
         getList()
@@ -139,13 +139,22 @@ const formSubmit = () => {
 
 const handleDelete = (index: number, row: any) => {
   // selectGateWay.value.gatewayId
-  loading.value = true
-  removeNfsAcl({ aclId: row.id, gatewayId: selectGateWay.value.gatewayId }).then((res) => {
-    // refresh
-    ElMessage.delSuccess(t('common.resSuccess'))
-    listNfsAcl({ gatewayId: selectGateWay.value.gatewayId }).then((res) => {
-      gateWayClient.value = res.data.NfsAclList
-      loading.value = false
+  ElMessageBox.confirm(t('common.delMessage'), t('common.delWarning'), {
+    confirmButtonText: t('common.delOk'),
+    cancelButtonText: t('common.delCancel'),
+    type: 'warning'
+  }).then(() => {
+    loading.value = true
+    removeNfsAcl({ aclId: row.id, gatewayId: selectGateWay.value.gatewayId }).then((res) => {
+      // refresh
+      ElMessage.success(t('common.resSuccess'))
+      listNfsAcl({ gatewayId: selectGateWay.value.gatewayId })
+        .then((res) => {
+          gateWayClient.value = res.data.NfsAclList
+        })
+        .finally(() => {
+          loading.value = false
+        })
     })
   })
 }
@@ -190,7 +199,7 @@ const scehema = ref<cascadeDropdownSchema[]>([
         cancelButtonText: t('common.delCancel'),
         type: 'warning'
       }).then(() => {
-        removeNFSGateway({ gatewayId: tagItem.row.gatewayId }).then((res) => {
+        removeNFSGateway({ gatewayId: tagItem.row.gatewayId }).then(() => {
           ElMessage.success(t('common.delSuccess'))
           getList()
         })
@@ -289,5 +298,8 @@ const scehema = ref<cascadeDropdownSchema[]>([
         </template>
       </ElTableColumn>
     </ElTable>
+    <template #footer>
+      <ElButton @click="removeClientFlag = false">{{ t('dialogDemo.close') }}</ElButton>
+    </template>
   </Dialog>
 </template>

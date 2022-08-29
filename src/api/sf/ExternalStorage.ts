@@ -6,6 +6,7 @@
  * > 版本：1.0
  * > 描述：Api Documentation
  ***********************************************/
+import { ResponseModelObject } from "./data-contracts"
 import { doRst, request, RequestParams } from "./http-client"
 
 /**
@@ -20,7 +21,7 @@ export const addExternalStorageResource = (
   query: { storageType: string },
   nasRemoteDiskStorageModel: any,
   params: RequestParams = {}
-): Promise<IResponse<object>> => {
+): Promise<ResponseModelObject> => {
   return request
     .post({
       url: `/fs/addExternalStorageResource`,
@@ -42,7 +43,7 @@ export const addExternalStorageResource = (
 export const getExternalStorageResource = (
   query: { storageId: number; storageType?: string },
   params: RequestParams = {}
-): Promise<IResponse<object>> => {
+): Promise<ResponseModelObject> => {
   return request
     .get({
       url: `/fs/getExternalStorageResource`,
@@ -63,7 +64,7 @@ export const getExternalStorageResource = (
 export const listExternalStorageResource = (
   query?: { storageType?: string },
   params: RequestParams = {}
-): Promise<IResponse<object>> => {
+): Promise<ResponseModelObject> => {
   return request
     .get({
       url: `/fs/listExternalStorageResource`,
@@ -84,7 +85,7 @@ export const listExternalStorageResource = (
 export const removeExternalStorageResource = (
   query: { storageId: number; storageType: string },
   params: RequestParams = {}
-): Promise<IResponse<object>> => {
+): Promise<ResponseModelObject> => {
   return request
     .delete({
       url: `/fs/removeExternalStorageResource`,
