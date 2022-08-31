@@ -64,7 +64,7 @@ const apis = {
     }
   },
   FS: {
-    api: 'http://10.0.3.232:8099/v2/api-docs',
+    api: 'http://10.0.3.216:8099/v2/api-docs',
     tags: {
       'apply-nfs-acl-relationship-controller': 'NfsAcl',
       'apply-samba-acl-relationship-controller': 'SambaAcl',

@@ -15,9 +15,10 @@ import {
   // ElForm,
   // ElFormItem
 } from 'element-plus'
+import { aclColumns, tableColumns, tableObject } from './config'
 import { CascadeDropdown } from '@/components/CascadeDropdown'
 // import { Form } from '@/components/Form'
-import { ref, reactive, computed, h, watch, unref, nextTick } from 'vue'
+import { ref, watch } from 'vue'
 // import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
 // import { TableData } from '@/api/table/types'
@@ -27,6 +28,7 @@ import { getNFSGateway, listNFSGateway } from '@/api/fs/NfsGateway'
 import { applyNfsAclRelationship, cancelNfsAclRelationship } from '@/api/fs/NfsAcl'
 const { t } = useI18n()
 const { required } = useValidator()
+
 // 操作数据后更新视图
 const TableAcl = ref()
 
@@ -44,70 +46,7 @@ const getBucketFlag = ref(false)
 
 const gatewayAcl = ref([])
 
-interface TableObject<T = any> {
-  pageSize: number
-  currentPage: number
-  total: number
-  tableList: T[]
-  params: any
-  loading: boolean
-  currentRow: Nullable<T>
-}
-
 const shareType = ref('apply')
-
-const tableObject = reactive<TableObject>({
-  // 页数
-  pageSize: 10,
-  // 当前页
-  currentPage: 1,
-  // 总条数
-  total: 0,
-  // 表格数据
-  tableList: [],
-  // AxiosConfig 配置
-  params: {},
-  // 加载中
-  loading: true,
-  // 当前行的数据
-  currentRow: null
-})
-
-const tableColumns = [
-  {
-    field: 'bucket',
-    label: '桶名'
-  },
-  {
-    field: 'creationDate',
-    label: '创建日期'
-  },
-  {
-    field: 'action',
-    label: '操作'
-  }
-]
-
-const aclColumns = [
-  {
-    field: 'hostname',
-    label: '客户端IP'
-  },
-  {
-    field: 'readOnly',
-    label: '访问权限',
-    formatter: (_, __, value) => {
-      return h('span', value ? '只读' : '读写')
-    }
-  },
-  {
-    field: 'sync',
-    label: '同步/异步',
-    formatter: (_, __, value) => {
-      return h('span', value ? '同步' : '异步')
-    }
-  }
-]
 
 const scehema = ref<cascadeDropdownSchema[]>([
   {
@@ -179,9 +118,9 @@ initList()
 
 const search = () => {
   tableObject.tableList = []
-  if (!searchId.value) {
-    return ElMessage.error('请选择对象资源')
-  }
+  // if (!searchId.value) {
+  //   return ElMessage.error('请选择对象资源')
+  // }
   tableObject.loading = true
   listBuckets({ storageId: searchId.value })
     .then((res) => {
@@ -552,7 +491,7 @@ const getPane = (val: string | number | void) => {
         class="mr-10"
         style="width: 20%"
         v-model="searchId"
-        placeholder="选择对象资源"
+        placeholder="存储桶名称"
         clearable
       >
         <ElOption

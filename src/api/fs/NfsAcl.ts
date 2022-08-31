@@ -39,13 +39,13 @@ export const applyNfsAclRelationship = (
  * @request PUT:/fs/cancelNfsAclRelationship
  */
 export const cancelNfsAclRelationship = (
-  nfsaclRelationShipModel: NFSACLRelationShipModel,
+  query: { bucketId: number; storageId: number },
   params: RequestParams = {}
 ): Promise<IResponse<object>> => {
   return request
     .put({
       url: `/fs/cancelNfsAclRelationship`,
-      data: nfsaclRelationShipModel,
+      params: query,
       ...params
     })
     .then((res) => doRst(res))
@@ -78,7 +78,7 @@ export const createNfsAcl = (nfsaclModel: NfsAclModel, params: RequestParams = {
  * @request GET:/fs/getNfsAcl
  */
 export const getNfsAcl = (
-  query: { aclId: number; gatewayId: number },
+  query: { aclId: number; bucketId: number; storageId: number },
   params: RequestParams = {}
 ): Promise<IResponse<object>> => {
   return request
@@ -98,7 +98,10 @@ export const getNfsAcl = (
  * @summary 获取所有nfs网关acl
  * @request GET:/fs/listNfsAcl
  */
-export const listNfsAcl = (query: { gatewayId: number }, params: RequestParams = {}): Promise<IResponse<object>> => {
+export const listNfsAcl = (
+  query: { bucketId: number; storageId: number },
+  params: RequestParams = {}
+): Promise<IResponse<object>> => {
   return request
     .get({
       url: `/fs/listNfsAcl`,
@@ -109,15 +112,15 @@ export const listNfsAcl = (query: { gatewayId: number }, params: RequestParams =
 }
 
 /**
- * @description 查找nfs网关acl
+ * @description 删除nfs网关acl
  *
  * @tags remove-nfs-acl-controller
  * @name RemoveNfsAcl
- * @summary 查找nfs网关acl
+ * @summary 删除nfs网关acl
  * @request DELETE:/fs/removeNfsAcl
  */
 export const removeNfsAcl = (
-  query: { aclId: number; gatewayId: number },
+  query: { aclId: number; bucketId: number; storageId: number },
   params: RequestParams = {}
 ): Promise<IResponse<object>> => {
   return request

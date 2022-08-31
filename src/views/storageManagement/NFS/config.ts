@@ -109,6 +109,9 @@ const crudSchemas = reactive<CrudSchema[]>([
   {
     field: 'gatewayName',
     label: t('externalStorage.name'),
+    virtualFilterMethod: (value, row, _) => {
+      return row.gatewayName.indexOf(value) > -1
+    },
     table: {
       show: true
     },
@@ -161,14 +164,14 @@ const crudSchemas = reactive<CrudSchema[]>([
       return NFStatus[cellValue]
     }
   },
-  {
-    field: 'mountPath',
-    label: '挂载路径',
-    width: '200px',
-    form: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'mountPath',
+  //   label: '挂载路径',
+  //   width: '200px',
+  //   form: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'virtualIp',
     label: '服务器IP',
@@ -183,14 +186,14 @@ const crudSchemas = reactive<CrudSchema[]>([
       }
     }
   },
-  {
-    field: 'sharedBucket',
-    label: '共享存储桶',
-    width: '200px',
-    form: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'sharedBucket',
+  //   label: '共享存储桶',
+  //   width: '200px',
+  //   form: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'createTime',
     label: '创建时间',

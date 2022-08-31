@@ -53,13 +53,6 @@ export default {
     port: '端口',
     updateTime: '更新时间'
   },
-  error: {
-    noPermission: `抱歉，您无权访问此页面。`,
-    pageError: '抱歉，您访问的页面不存在。',
-    networkError: '抱歉，服务器报告错误。',
-    returnToHome: '返回首页',
-    timeout: '请求超时'
-  },
   setting: {
     projectSetting: '项目配置',
     theme: '主题',
@@ -470,8 +463,19 @@ export default {
   rest: {
     ObjectResource: '对象资源',
     ObjectResourceDes: '对象资源管理',
-    NFS: 'NFS网关'
+    NFS: 'NFS网关',
+    Bucket: '存储桶'
   },
-  'resource name has already exists': '资源名称已重复',
-  'object storage resource is not exist': '该对象存储资源已不存在'
+  error: {
+    noPermission: `抱歉，您无权访问此页面。`,
+    pageError: '抱歉，您访问的页面不存在。',
+    networkError: '抱歉，服务器报告错误。',
+    returnToHome: '返回首页',
+    timeout: '请求超时',
+    'resource name has already exists': '资源名称已重复',
+    'object storage resource is not exist': '该对象存储资源已不存在',
+    'the createNfsAcl want to createNfsAcl:, but already exist': '当前IP已存在',
+    'Internal error': '内部错误',
+    'timeout of 10000ms exceeded': '请求超时'
+  }
 }

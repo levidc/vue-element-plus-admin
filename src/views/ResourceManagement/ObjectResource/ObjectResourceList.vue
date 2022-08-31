@@ -57,7 +57,7 @@ const save = () => {
 //   return formSchema
 // })
 // allSchemas.formSchema[0]?.componentProps?.disabled =
-console.log('allSchemas.formSchema', allSchemas.formSchema)
+// console.log('allSchemas.formSchema', allSchemas.formSchema)
 
 const getName = (row: {}) => {
   createFlag.value = true

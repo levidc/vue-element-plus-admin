@@ -4,9 +4,10 @@ import type { App } from 'vue'
 import { Layout, getParentLayout } from '@/utils/routerHelper'
 import { useI18n } from '@/hooks/web/useI18n'
 
-import { getRoutes as getRestfulRoutes } from '@/views/MyDemos/Restful/routes'
+// import { getRoutes as getRestfulRoutes } from '@/views/MyDemos/Restful/routes'
 import { getRoutes as ObjectResourceRoute } from '@/views/ResourceManagement/ObjectResource/routes'
 import { getRoutes as NFSRoute } from '@/views/storageManagement/NFS/routes'
+import { getRoutes as BucketRouter } from '@/views/storageManagement/Bucket/routes'
 const { t } = useI18n()
 
 const demoRouterMap: AppRouteRecordRaw[] = [
@@ -161,15 +162,16 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
     },
     children: [
       ...NFSRoute('/storageManagement'),
-      {
-        path: 'bucket',
-        name: 'bucket',
-        component: () => import('@/views/storageManagement/bucket/index.vue'),
-        meta: {
-          title: '存储桶',
-          noCache: true
-        }
-      }
+      ...BucketRouter('/storageManagement')
+      // {
+      //   path: 'bucket',
+      //   name: 'bucket',
+      //   component: () => import('@/views/storageManagement/bucket/index.vue'),
+      //   meta: {
+      //     title: '存储桶',
+      //     noCache: true
+      //   }
+      // }
       // {
       //   path: 'NFS1',
       //   name: 'NFS',

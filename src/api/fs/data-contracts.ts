@@ -156,11 +156,11 @@ export interface MountEntity {
 }
 
 export interface NFSACLRelationShipModel {
-  /** nfs acl 的id的list，由用户选中的gateway的id 查询获取 */
-  applyNfsAclIdList?: number[]
-
-  /** bucket 名称，在存储桶界面，由用户选中 */
-  bucketName?: string
+  /**
+   * bucketId，在存储桶界面，由用户选中的bucket获取
+   * @format int64
+   */
+  bucketId?: number
 
   /**
    * NFSGateway的id
@@ -237,10 +237,10 @@ export interface NasRemoteDiskStorageModel {
 
 export interface NfsAclModel {
   /**
-   * NFS网关id
+   * 存储桶id
    * @format int64
    */
-  gatewayId?: number
+  bucketId?: number
 
   /** 客户端ip */
   hostname?: string
@@ -252,7 +252,16 @@ export interface NfsAclModel {
   id?: number
 
   /** 是否只读 */
+  isSharing?: boolean
+
+  /** 是否只读 */
   readOnly?: boolean
+
+  /**
+   * 存储资源id
+   * @format int64
+   */
+  storageId?: number
 
   /** 是否同步sync */
   sync?: boolean
